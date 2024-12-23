@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Ruyi-GUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("GUI for Ruyi Image To Video")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("bmgjet")]
 [assembly: AssemblyProduct("Ruyi-GUI")]
 [assembly: AssemblyCopyright("Copyright © bmgjet 2024")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("bmgjet")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible

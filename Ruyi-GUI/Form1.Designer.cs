@@ -72,8 +72,10 @@
             this.RunJobs = new System.Windows.Forms.Button();
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -140,7 +142,7 @@
             // 
             // SelectImg1
             // 
-            this.SelectImg1.Location = new System.Drawing.Point(6, 298);
+            this.SelectImg1.Location = new System.Drawing.Point(6, 300);
             this.SelectImg1.Margin = new System.Windows.Forms.Padding(2);
             this.SelectImg1.Name = "SelectImg1";
             this.SelectImg1.Size = new System.Drawing.Size(257, 22);
@@ -151,7 +153,7 @@
             // 
             // SelectImg2
             // 
-            this.SelectImg2.Location = new System.Drawing.Point(276, 298);
+            this.SelectImg2.Location = new System.Drawing.Point(276, 300);
             this.SelectImg2.Margin = new System.Windows.Forms.Padding(2);
             this.SelectImg2.Name = "SelectImg2";
             this.SelectImg2.Size = new System.Drawing.Size(257, 22);
@@ -257,7 +259,9 @@
             this.AspectRatio.FormattingEnabled = true;
             this.AspectRatio.Items.AddRange(new object[] {
             "16:9",
-            "9:16"});
+            "9:16",
+            "4:3",
+            "1:1"});
             this.AspectRatio.Location = new System.Drawing.Point(93, 372);
             this.AspectRatio.Margin = new System.Windows.Forms.Padding(2);
             this.AspectRatio.Name = "AspectRatio";
@@ -400,7 +404,7 @@
             this.Seed.Name = "Seed";
             this.Seed.Size = new System.Drawing.Size(95, 20);
             this.Seed.TabIndex = 31;
-            this.Seed.Text = "17";
+            this.Seed.Text = "42";
             // 
             // Seedlbl
             // 
@@ -440,10 +444,10 @@
             // 
             // GenerateButton
             // 
-            this.GenerateButton.Location = new System.Drawing.Point(6, 495);
+            this.GenerateButton.Location = new System.Drawing.Point(6, 508);
             this.GenerateButton.Margin = new System.Windows.Forms.Padding(2);
             this.GenerateButton.Name = "GenerateButton";
-            this.GenerateButton.Size = new System.Drawing.Size(527, 30);
+            this.GenerateButton.Size = new System.Drawing.Size(544, 30);
             this.GenerateButton.TabIndex = 34;
             this.GenerateButton.Text = "Generate Video";
             this.GenerateButton.UseVisualStyleBackColor = true;
@@ -452,9 +456,9 @@
             // PlayVideo
             // 
             this.PlayVideo.Enabled = false;
-            this.PlayVideo.Location = new System.Drawing.Point(8, 527);
+            this.PlayVideo.Location = new System.Drawing.Point(6, 543);
             this.PlayVideo.Name = "PlayVideo";
-            this.PlayVideo.Size = new System.Drawing.Size(524, 24);
+            this.PlayVideo.Size = new System.Drawing.Size(544, 24);
             this.PlayVideo.TabIndex = 35;
             this.PlayVideo.Text = "Play Video";
             this.PlayVideo.UseVisualStyleBackColor = true;
@@ -463,14 +467,14 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1000;
+            this.timer1.Interval = 2000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // AddJob
             // 
-            this.AddJob.Location = new System.Drawing.Point(540, 458);
+            this.AddJob.Location = new System.Drawing.Point(556, 451);
             this.AddJob.Name = "AddJob";
-            this.AddJob.Size = new System.Drawing.Size(101, 24);
+            this.AddJob.Size = new System.Drawing.Size(101, 31);
             this.AddJob.TabIndex = 36;
             this.AddJob.Text = "Add As Job";
             this.AddJob.UseVisualStyleBackColor = true;
@@ -479,17 +483,17 @@
             // JobList
             // 
             this.JobList.FormattingEnabled = true;
-            this.JobList.Location = new System.Drawing.Point(540, 6);
+            this.JobList.Location = new System.Drawing.Point(556, 12);
             this.JobList.Name = "JobList";
-            this.JobList.Size = new System.Drawing.Size(235, 446);
+            this.JobList.Size = new System.Drawing.Size(228, 433);
             this.JobList.TabIndex = 37;
             this.JobList.SelectedIndexChanged += new System.EventHandler(this.JobList_SelectedIndexChanged);
             // 
             // RemoveJob
             // 
-            this.RemoveJob.Location = new System.Drawing.Point(674, 458);
+            this.RemoveJob.Location = new System.Drawing.Point(683, 451);
             this.RemoveJob.Name = "RemoveJob";
-            this.RemoveJob.Size = new System.Drawing.Size(101, 24);
+            this.RemoveJob.Size = new System.Drawing.Size(101, 31);
             this.RemoveJob.TabIndex = 38;
             this.RemoveJob.Text = "Remove Job";
             this.RemoveJob.UseVisualStyleBackColor = true;
@@ -497,9 +501,9 @@
             // 
             // RunJobs
             // 
-            this.RunJobs.Location = new System.Drawing.Point(540, 488);
+            this.RunJobs.Location = new System.Drawing.Point(556, 488);
             this.RunJobs.Name = "RunJobs";
-            this.RunJobs.Size = new System.Drawing.Size(234, 63);
+            this.RunJobs.Size = new System.Drawing.Size(228, 79);
             this.RunJobs.TabIndex = 39;
             this.RunJobs.Text = "Run Jobs";
             this.RunJobs.UseVisualStyleBackColor = true;
@@ -520,51 +524,59 @@
             this.Batch.UseVisualStyleBackColor = true;
             this.Batch.Click += new System.EventHandler(this.Batch_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.Batch);
+            this.panel1.Controls.Add(this.Schedulerlbl);
+            this.panel1.Controls.Add(this.Scheduler);
+            this.panel1.Controls.Add(this.Seed);
+            this.panel1.Controls.Add(this.Seedlbl);
+            this.panel1.Controls.Add(this.Cfg);
+            this.panel1.Controls.Add(this.Cfglbl);
+            this.panel1.Controls.Add(this.Steps);
+            this.panel1.Controls.Add(this.Stepslbl);
+            this.panel1.Controls.Add(this.Samplerlbl);
+            this.panel1.Controls.Add(this.GPUOffload);
+            this.panel1.Controls.Add(this.Offloadlbl);
+            this.panel1.Controls.Add(this.LowMemoryMode);
+            this.panel1.Controls.Add(this.Directionlbl);
+            this.panel1.Controls.Add(this.Direction);
+            this.panel1.Controls.Add(this.Motionlbl);
+            this.panel1.Controls.Add(this.Motion);
+            this.panel1.Controls.Add(this.Aspectlbl);
+            this.panel1.Controls.Add(this.AspectRatio);
+            this.panel1.Controls.Add(this.Resolutionlbl);
+            this.panel1.Controls.Add(this.Resolution);
+            this.panel1.Controls.Add(this.Frameslbl);
+            this.panel1.Controls.Add(this.FrameRate);
+            this.panel1.Controls.Add(this.SelectVideoOut);
+            this.panel1.Controls.Add(this.VideoOut);
+            this.panel1.Controls.Add(this.Videolbl);
+            this.panel1.Controls.Add(this.SelectImg2);
+            this.panel1.Controls.Add(this.SelectImg1);
+            this.panel1.Controls.Add(this.Img2);
+            this.panel1.Controls.Add(this.Img1);
+            this.panel1.Controls.Add(this.Img2lbl);
+            this.panel1.Controls.Add(this.Img1lbl);
+            this.panel1.Controls.Add(this.pictureBox2);
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Location = new System.Drawing.Point(6, 6);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(544, 497);
+            this.panel1.TabIndex = 41;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 557);
-            this.Controls.Add(this.Batch);
+            this.ClientSize = new System.Drawing.Size(555, 572);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.RunJobs);
             this.Controls.Add(this.RemoveJob);
             this.Controls.Add(this.JobList);
             this.Controls.Add(this.AddJob);
             this.Controls.Add(this.PlayVideo);
             this.Controls.Add(this.GenerateButton);
-            this.Controls.Add(this.Schedulerlbl);
-            this.Controls.Add(this.Scheduler);
-            this.Controls.Add(this.Seed);
-            this.Controls.Add(this.Seedlbl);
-            this.Controls.Add(this.Cfg);
-            this.Controls.Add(this.Cfglbl);
-            this.Controls.Add(this.Steps);
-            this.Controls.Add(this.Stepslbl);
-            this.Controls.Add(this.Samplerlbl);
-            this.Controls.Add(this.GPUOffload);
-            this.Controls.Add(this.Offloadlbl);
-            this.Controls.Add(this.LowMemoryMode);
-            this.Controls.Add(this.Directionlbl);
-            this.Controls.Add(this.Direction);
-            this.Controls.Add(this.Motionlbl);
-            this.Controls.Add(this.Motion);
-            this.Controls.Add(this.Aspectlbl);
-            this.Controls.Add(this.AspectRatio);
-            this.Controls.Add(this.Resolutionlbl);
-            this.Controls.Add(this.Resolution);
-            this.Controls.Add(this.Frameslbl);
-            this.Controls.Add(this.FrameRate);
-            this.Controls.Add(this.SelectVideoOut);
-            this.Controls.Add(this.VideoOut);
-            this.Controls.Add(this.Videolbl);
-            this.Controls.Add(this.SelectImg2);
-            this.Controls.Add(this.SelectImg1);
-            this.Controls.Add(this.Img2);
-            this.Controls.Add(this.Img1);
-            this.Controls.Add(this.Img2lbl);
-            this.Controls.Add(this.Img1lbl);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -575,8 +587,9 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -624,6 +637,7 @@
         private System.Windows.Forms.Button RunJobs;
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button Batch;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
