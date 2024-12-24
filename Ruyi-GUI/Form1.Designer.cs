@@ -73,6 +73,13 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Weighttxt = new System.Windows.Forms.TextBox();
+            this.Weightlbl = new System.Windows.Forms.Label();
+            this.LoraButton = new System.Windows.Forms.Button();
+            this.Loratxt = new System.Windows.Forms.TextBox();
+            this.Loralbl = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.VideoRes = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -204,9 +211,12 @@
             "120"});
             this.FrameRate.Location = new System.Drawing.Point(6, 372);
             this.FrameRate.Margin = new System.Windows.Forms.Padding(2);
+            this.FrameRate.MaxLength = 3;
             this.FrameRate.Name = "FrameRate";
             this.FrameRate.Size = new System.Drawing.Size(80, 21);
             this.FrameRate.TabIndex = 11;
+            this.FrameRate.Text = "24";
+            this.FrameRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Frameslbl
             // 
@@ -240,9 +250,12 @@
             "896"});
             this.Resolution.Location = new System.Drawing.Point(166, 372);
             this.Resolution.Margin = new System.Windows.Forms.Padding(2);
+            this.Resolution.MaxLength = 3;
             this.Resolution.Name = "Resolution";
             this.Resolution.Size = new System.Drawing.Size(116, 21);
             this.Resolution.TabIndex = 13;
+            this.Resolution.Text = "384";
+            this.Resolution.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Aspectlbl
             // 
@@ -264,9 +277,12 @@
             "1:1"});
             this.AspectRatio.Location = new System.Drawing.Point(93, 372);
             this.AspectRatio.Margin = new System.Windows.Forms.Padding(2);
+            this.AspectRatio.MaxLength = 5;
             this.AspectRatio.Name = "AspectRatio";
             this.AspectRatio.Size = new System.Drawing.Size(70, 21);
             this.AspectRatio.TabIndex = 15;
+            this.AspectRatio.Text = "16:9";
+            this.AspectRatio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.AspectRatio_KeyPress);
             // 
             // Motionlbl
             // 
@@ -289,9 +305,12 @@
             "4"});
             this.Motion.Location = new System.Drawing.Point(380, 372);
             this.Motion.Margin = new System.Windows.Forms.Padding(2);
+            this.Motion.MaxLength = 4;
             this.Motion.Name = "Motion";
-            this.Motion.Size = new System.Drawing.Size(76, 21);
+            this.Motion.Size = new System.Drawing.Size(61, 21);
             this.Motion.TabIndex = 17;
+            this.Motion.Text = "auto";
+            this.Motion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberAndAuto);
             // 
             // Directionlbl
             // 
@@ -315,14 +334,17 @@
             "down"});
             this.Direction.Location = new System.Drawing.Point(285, 372);
             this.Direction.Margin = new System.Windows.Forms.Padding(2);
+            this.Direction.MaxLength = 4;
             this.Direction.Name = "Direction";
             this.Direction.Size = new System.Drawing.Size(92, 21);
             this.Direction.TabIndex = 19;
+            this.Direction.Text = "auto";
+            this.Direction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberAndAuto);
             // 
             // LowMemoryMode
             // 
             this.LowMemoryMode.AutoSize = true;
-            this.LowMemoryMode.Location = new System.Drawing.Point(119, 418);
+            this.LowMemoryMode.Location = new System.Drawing.Point(113, 425);
             this.LowMemoryMode.Margin = new System.Windows.Forms.Padding(2);
             this.LowMemoryMode.Name = "LowMemoryMode";
             this.LowMemoryMode.Size = new System.Drawing.Size(142, 17);
@@ -333,7 +355,7 @@
             // Offloadlbl
             // 
             this.Offloadlbl.AutoSize = true;
-            this.Offloadlbl.Location = new System.Drawing.Point(3, 400);
+            this.Offloadlbl.Location = new System.Drawing.Point(3, 403);
             this.Offloadlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Offloadlbl.Name = "Offloadlbl";
             this.Offloadlbl.Size = new System.Drawing.Size(100, 13);
@@ -342,17 +364,19 @@
             // 
             // GPUOffload
             // 
-            this.GPUOffload.Location = new System.Drawing.Point(6, 415);
+            this.GPUOffload.Location = new System.Drawing.Point(6, 422);
             this.GPUOffload.Margin = new System.Windows.Forms.Padding(2);
+            this.GPUOffload.MaxLength = 2;
             this.GPUOffload.Name = "GPUOffload";
             this.GPUOffload.Size = new System.Drawing.Size(95, 20);
             this.GPUOffload.TabIndex = 24;
             this.GPUOffload.Text = "0";
+            this.GPUOffload.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Samplerlbl
             // 
             this.Samplerlbl.AutoSize = true;
-            this.Samplerlbl.Location = new System.Drawing.Point(3, 439);
+            this.Samplerlbl.Location = new System.Drawing.Point(3, 447);
             this.Samplerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Samplerlbl.Name = "Samplerlbl";
             this.Samplerlbl.Size = new System.Drawing.Size(89, 13);
@@ -361,17 +385,19 @@
             // 
             // Steps
             // 
-            this.Steps.Location = new System.Drawing.Point(11, 470);
+            this.Steps.Location = new System.Drawing.Point(11, 480);
             this.Steps.Margin = new System.Windows.Forms.Padding(2);
+            this.Steps.MaxLength = 2;
             this.Steps.Name = "Steps";
             this.Steps.Size = new System.Drawing.Size(95, 20);
             this.Steps.TabIndex = 27;
             this.Steps.Text = "25";
+            this.Steps.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Stepslbl
             // 
             this.Stepslbl.AutoSize = true;
-            this.Stepslbl.Location = new System.Drawing.Point(5, 455);
+            this.Stepslbl.Location = new System.Drawing.Point(5, 463);
             this.Stepslbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Stepslbl.Name = "Stepslbl";
             this.Stepslbl.Size = new System.Drawing.Size(37, 13);
@@ -380,17 +406,19 @@
             // 
             // Cfg
             // 
-            this.Cfg.Location = new System.Drawing.Point(113, 470);
+            this.Cfg.Location = new System.Drawing.Point(113, 480);
             this.Cfg.Margin = new System.Windows.Forms.Padding(2);
+            this.Cfg.MaxLength = 4;
             this.Cfg.Name = "Cfg";
             this.Cfg.Size = new System.Drawing.Size(95, 20);
             this.Cfg.TabIndex = 29;
             this.Cfg.Text = "7.0";
+            this.Cfg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cfg_KeyPress);
             // 
             // Cfglbl
             // 
             this.Cfglbl.AutoSize = true;
-            this.Cfglbl.Location = new System.Drawing.Point(110, 455);
+            this.Cfglbl.Location = new System.Drawing.Point(110, 463);
             this.Cfglbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Cfglbl.Name = "Cfglbl";
             this.Cfglbl.Size = new System.Drawing.Size(26, 13);
@@ -399,17 +427,19 @@
             // 
             // Seed
             // 
-            this.Seed.Location = new System.Drawing.Point(215, 470);
+            this.Seed.Location = new System.Drawing.Point(215, 480);
             this.Seed.Margin = new System.Windows.Forms.Padding(2);
+            this.Seed.MaxLength = 6;
             this.Seed.Name = "Seed";
             this.Seed.Size = new System.Drawing.Size(95, 20);
             this.Seed.TabIndex = 31;
             this.Seed.Text = "42";
+            this.Seed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Seedlbl
             // 
             this.Seedlbl.AutoSize = true;
-            this.Seedlbl.Location = new System.Drawing.Point(212, 455);
+            this.Seedlbl.Location = new System.Drawing.Point(212, 463);
             this.Seedlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Seedlbl.Name = "Seedlbl";
             this.Seedlbl.Size = new System.Drawing.Size(35, 13);
@@ -419,7 +449,7 @@
             // Schedulerlbl
             // 
             this.Schedulerlbl.AutoSize = true;
-            this.Schedulerlbl.Location = new System.Drawing.Point(315, 455);
+            this.Schedulerlbl.Location = new System.Drawing.Point(315, 463);
             this.Schedulerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Schedulerlbl.Name = "Schedulerlbl";
             this.Schedulerlbl.Size = new System.Drawing.Size(58, 13);
@@ -434,17 +464,17 @@
             "Euler",
             "Euler A",
             "DPM++",
-            "PNDM",
-            "DDIM"});
-            this.Scheduler.Location = new System.Drawing.Point(318, 470);
+            "PNDM"});
+            this.Scheduler.Location = new System.Drawing.Point(318, 480);
             this.Scheduler.Margin = new System.Windows.Forms.Padding(2);
             this.Scheduler.Name = "Scheduler";
             this.Scheduler.Size = new System.Drawing.Size(138, 21);
             this.Scheduler.TabIndex = 32;
+            this.Scheduler.Text = "DDIM";
             // 
             // GenerateButton
             // 
-            this.GenerateButton.Location = new System.Drawing.Point(6, 508);
+            this.GenerateButton.Location = new System.Drawing.Point(6, 513);
             this.GenerateButton.Margin = new System.Windows.Forms.Padding(2);
             this.GenerateButton.Name = "GenerateButton";
             this.GenerateButton.Size = new System.Drawing.Size(544, 30);
@@ -456,7 +486,7 @@
             // PlayVideo
             // 
             this.PlayVideo.Enabled = false;
-            this.PlayVideo.Location = new System.Drawing.Point(6, 543);
+            this.PlayVideo.Location = new System.Drawing.Point(6, 548);
             this.PlayVideo.Name = "PlayVideo";
             this.PlayVideo.Size = new System.Drawing.Size(544, 24);
             this.PlayVideo.TabIndex = 35;
@@ -501,7 +531,7 @@
             // 
             // RunJobs
             // 
-            this.RunJobs.Location = new System.Drawing.Point(556, 488);
+            this.RunJobs.Location = new System.Drawing.Point(556, 493);
             this.RunJobs.Name = "RunJobs";
             this.RunJobs.Size = new System.Drawing.Size(228, 79);
             this.RunJobs.TabIndex = 39;
@@ -516,7 +546,7 @@
             // 
             // Batch
             // 
-            this.Batch.Location = new System.Drawing.Point(465, 470);
+            this.Batch.Location = new System.Drawing.Point(465, 480);
             this.Batch.Name = "Batch";
             this.Batch.Size = new System.Drawing.Size(67, 21);
             this.Batch.TabIndex = 40;
@@ -526,6 +556,13 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.Weighttxt);
+            this.panel1.Controls.Add(this.Weightlbl);
+            this.panel1.Controls.Add(this.LoraButton);
+            this.panel1.Controls.Add(this.Loratxt);
+            this.panel1.Controls.Add(this.Loralbl);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.VideoRes);
             this.panel1.Controls.Add(this.Batch);
             this.panel1.Controls.Add(this.Schedulerlbl);
             this.panel1.Controls.Add(this.Scheduler);
@@ -562,14 +599,93 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(544, 497);
+            this.panel1.Size = new System.Drawing.Size(544, 507);
             this.panel1.TabIndex = 41;
+            // 
+            // Weighttxt
+            // 
+            this.Weighttxt.Location = new System.Drawing.Point(330, 422);
+            this.Weighttxt.Margin = new System.Windows.Forms.Padding(2);
+            this.Weighttxt.MaxLength = 4;
+            this.Weighttxt.Name = "Weighttxt";
+            this.Weighttxt.Size = new System.Drawing.Size(43, 20);
+            this.Weighttxt.TabIndex = 47;
+            this.Weighttxt.Text = "1.0";
+            this.Weighttxt.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cfg_KeyPress);
+            // 
+            // Weightlbl
+            // 
+            this.Weightlbl.AutoSize = true;
+            this.Weightlbl.Location = new System.Drawing.Point(282, 426);
+            this.Weightlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.Weightlbl.Name = "Weightlbl";
+            this.Weightlbl.Size = new System.Drawing.Size(44, 13);
+            this.Weightlbl.TabIndex = 46;
+            this.Weightlbl.Text = "Weight:";
+            // 
+            // LoraButton
+            // 
+            this.LoraButton.Location = new System.Drawing.Point(445, 422);
+            this.LoraButton.Margin = new System.Windows.Forms.Padding(2);
+            this.LoraButton.Name = "LoraButton";
+            this.LoraButton.Size = new System.Drawing.Size(87, 22);
+            this.LoraButton.TabIndex = 45;
+            this.LoraButton.Text = "Select";
+            this.LoraButton.UseVisualStyleBackColor = true;
+            this.LoraButton.Click += new System.EventHandler(this.LoraButton_Click);
+            // 
+            // Loratxt
+            // 
+            this.Loratxt.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.Loratxt.Location = new System.Drawing.Point(318, 400);
+            this.Loratxt.Margin = new System.Windows.Forms.Padding(2);
+            this.Loratxt.Name = "Loratxt";
+            this.Loratxt.ReadOnly = true;
+            this.Loratxt.Size = new System.Drawing.Size(215, 20);
+            this.Loratxt.TabIndex = 44;
+            // 
+            // Loralbl
+            // 
+            this.Loralbl.AutoSize = true;
+            this.Loralbl.Location = new System.Drawing.Point(282, 403);
+            this.Loralbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.Loralbl.Name = "Loralbl";
+            this.Loralbl.Size = new System.Drawing.Size(31, 13);
+            this.Loralbl.TabIndex = 43;
+            this.Loralbl.Text = "Lora:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(447, 357);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(84, 13);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Mp4 Resolution:";
+            // 
+            // VideoRes
+            // 
+            this.VideoRes.FormattingEnabled = true;
+            this.VideoRes.Items.AddRange(new object[] {
+            "auto",
+            "576, 448",
+            "512, 288",
+            "720, 540"});
+            this.VideoRes.Location = new System.Drawing.Point(445, 372);
+            this.VideoRes.Margin = new System.Windows.Forms.Padding(2);
+            this.VideoRes.MaxLength = 8;
+            this.VideoRes.Name = "VideoRes";
+            this.VideoRes.Size = new System.Drawing.Size(91, 21);
+            this.VideoRes.TabIndex = 41;
+            this.VideoRes.Text = "auto";
+            this.VideoRes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.VideoRes_KeyPress);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 572);
+            this.ClientSize = new System.Drawing.Size(555, 577);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.RunJobs);
             this.Controls.Add(this.RemoveJob);
@@ -638,6 +754,13 @@
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Button Batch;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox VideoRes;
+        private System.Windows.Forms.TextBox Weighttxt;
+        private System.Windows.Forms.Label Weightlbl;
+        private System.Windows.Forms.Button LoraButton;
+        private System.Windows.Forms.TextBox Loratxt;
+        private System.Windows.Forms.Label Loralbl;
     }
 }
 
