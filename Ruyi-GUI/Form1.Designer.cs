@@ -80,6 +80,8 @@
             this.Loralbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.VideoRes = new System.Windows.Forms.ComboBox();
+            this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.Updates = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -271,10 +273,15 @@
             // 
             this.AspectRatio.FormattingEnabled = true;
             this.AspectRatio.Items.AddRange(new object[] {
+            "21:9",
             "16:9",
-            "9:16",
             "4:3",
-            "1:1"});
+            "3:2",
+            "1:1",
+            "2:3",
+            "3:4",
+            "9:16",
+            "9:21"});
             this.AspectRatio.Location = new System.Drawing.Point(93, 372);
             this.AspectRatio.Margin = new System.Windows.Forms.Padding(2);
             this.AspectRatio.MaxLength = 5;
@@ -556,6 +563,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.Updates);
             this.panel1.Controls.Add(this.Weighttxt);
             this.panel1.Controls.Add(this.Weightlbl);
             this.panel1.Controls.Add(this.LoraButton);
@@ -669,9 +677,15 @@
             this.VideoRes.FormattingEnabled = true;
             this.VideoRes.Items.AddRange(new object[] {
             "auto",
-            "576, 448",
-            "512, 288",
-            "720, 540"});
+            "1920, 1080",
+            "1366, 768",
+            "1280, 720",
+            "1024, 768",
+            "768, 768",
+            "720, 540",
+            "854, 480",
+            "640, 360 ",
+            "512, 512"});
             this.VideoRes.Location = new System.Drawing.Point(445, 372);
             this.VideoRes.Margin = new System.Windows.Forms.Padding(2);
             this.VideoRes.MaxLength = 8;
@@ -680,6 +694,21 @@
             this.VideoRes.TabIndex = 41;
             this.VideoRes.Text = "auto";
             this.VideoRes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.VideoRes_KeyPress);
+            // 
+            // timer3
+            // 
+            this.timer3.Interval = 5000;
+            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+            // 
+            // Updates
+            // 
+            this.Updates.AutoSize = true;
+            this.Updates.Location = new System.Drawing.Point(382, 449);
+            this.Updates.Name = "Updates";
+            this.Updates.Size = new System.Drawing.Size(150, 17);
+            this.Updates.TabIndex = 48;
+            this.Updates.Text = "Check For Model Updates";
+            this.Updates.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -761,6 +790,8 @@
         private System.Windows.Forms.Button LoraButton;
         private System.Windows.Forms.TextBox Loratxt;
         private System.Windows.Forms.Label Loralbl;
+        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.CheckBox Updates;
     }
 }
 

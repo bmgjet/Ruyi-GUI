@@ -1,9 +1,19 @@
-﻿using System;
+﻿/*▄▄▄    ███▄ ▄███▓  ▄████  ▄▄▄██▀▀▀▓█████▄▄▄█████▓
+▓█████▄ ▓██▒▀█▀ ██▒ ██▒ ▀█▒   ▒██   ▓█   ▀▓  ██▒ ▓▒
+▒██▒ ▄██▓██    ▓██░▒██░▄▄▄░   ░██   ▒███  ▒ ▓██░ ▒░
+▒██░█▀  ▒██    ▒██ ░▓█  ██▓▓██▄██▓  ▒▓█  ▄░ ▓██▓ ░ 
+░▓█  ▀█▓▒██▒   ░██▒░▒▓███▀▒ ▓███▒   ░▒████▒ ▒██▒ ░ 
+░▒▓███▀▒░ ▒░   ░  ░ ░▒   ▒  ▒▓▒▒░   ░░ ▒░ ░ ▒ ░░   
+▒░▒   ░ ░  ░      ░  ░   ░  ▒ ░▒░    ░ ░  ░   ░    
+ ░    ░ ░      ░   ░ ░   ░  ░ ░ ░      ░    ░      
+ ░             ░         ░  ░   ░      ░  ░*/
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,23 +26,33 @@ namespace Ruyi_GUI
     public partial class Form1 : Form
     {
         public static List<string> LogMessages = new List<string>();
-        public string PythonCode;
+        public string[] PythonCode;
         public bool DoingJobs = false;
         public bool Not100 = true;
 
         public Form1()
         {
             InitializeComponent();
-            PythonCode = Encoding.UTF8.GetString(Convert.FromBase64String(Decompress(Convert.FromBase64String("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"))));
             if (File.Exists("Config.cfg")) { LoadSettings(File.ReadAllText("Config.cfg")); }
             else { SaveSettings(); }
             if(!File.Exists("environment.bat"))
             {
                 MessageBox.Show("environment.bat file missing, Is this exe being ran from Forge Install folder?","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
+            if (!Directory.Exists("Ruyi-Models"))
+            {
+                MessageBox.Show("Missing Ruyi-Models Folder", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if(!File.Exists(Path.Combine("Ruyi-Models", "predict_i2v.py")))
+            {
+                MessageBox.Show("Missing predict_i2v.py", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            PythonCode = File.ReadAllLines(Path.Combine("Ruyi-Models", "predict_i2v.py"));
         }
 
-        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text; }
+        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked; }
 
         private void SaveSettings() { File.WriteAllText("Config.cfg", SettingsString()); }
 
@@ -58,6 +78,7 @@ namespace Ruyi_GUI
                 VideoRes.Text = SSettings[14];
                 Loratxt.Text = SSettings[15]; 
                 Weighttxt.Text = SSettings[16];
+                Updates.Checked = bool.Parse(SSettings[17]);
             }
             catch
             {
@@ -107,16 +128,19 @@ namespace Ruyi_GUI
 
         private void LogFiltered(string message)
         {
-            if (string.IsNullOrEmpty(message)) { return; }
+            if (string.IsNullOrEmpty(message) || message.Contains("  attn_output = torch.nn.functional.scaled_dot_product_attention(")) { return; }
             LogMessages.Add(message);
-            if (message.Contains("%")) { AppendTextBox(message); }
+            if (message.Contains("%") || message.StartsWith("Fetching ")) { AppendTextBox(message); }
+            if (message.StartsWith("Fetching ")) { return; }
             if (message.Contains("100%") && Not100) { Not100 = false; return; }
             if (message.Contains("100%"))
             {
                 Not100 = true;
+                timer3.Enabled = false;
                 AppendTextBox("Saving Mp4...");
                 GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = true; }));
                 panel1.BeginInvoke(new Action(() => { panel1.Enabled = true; }));
+                LogMessages.Add("Finished Generation @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 if (DoingJobs)
                 {
                     while (!File.Exists(VideoOut.Text)) { Thread.Sleep(1000); }
@@ -154,18 +178,115 @@ namespace Ruyi_GUI
             }
         }
 
-        private void ExecuteCommand()
+        private string ParsePythonCode()
         {
-            if (!Directory.Exists("Ruyi-Models"))
-            {
-                MessageBox.Show("Missing Ruyi-Models Folder", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            string code = "";
             string Image2 = string.IsNullOrEmpty(Img2.Text) ? "None" : @"""" + Img2.Text.Replace(@"\", @"\\") + @"""";
             string Lora = string.IsNullOrEmpty(Loratxt.Text) ? "None" : @"""" + Loratxt.Text.Replace(@"\", @"\\") + @"""";
-            string CallCode = PythonCode.Replace("{$IMAGE1}", Img1.Text.Replace(@"\", @"\\")).Replace("{$IMAGE2}", Image2).Replace("{$VIDEO}", VideoOut.Text.Replace(@"\", @"\\")).Replace("{$FRAMES}", FrameRate.Text).Replace("{$RES}", Resolution.Text).Replace("{$ASPECT}", AspectRatio.Text).Replace("{$MOTION}", Motion.Text).Replace("{$DIRECTION}", Direction.Text).Replace("{$STEPS}", Steps.Text).Replace("{$CFG}", Cfg.Text).Replace("{$SCHEDULER}", Scheduler.Text).Replace("{$LOWMEM}", LowMemoryMode.Checked.ToString()).Replace("{$OFFLOAD}", GPUOffload.Text).Replace("{$SEED}", Seed.Text).Replace("video_size          = None", "video_size          = " + VideoRes.Text.Replace("auto","None")).Replace("lora_path           = None", "lora_path           = " + Lora).Replace("lora_weight         = 1.0", "lora_weight         = " + Weighttxt.Text);
+            foreach (string line in PythonCode)
+            {
+                if(line.StartsWith("start_image_path    = "))
+                {
+                    code += @"start_image_path    = """ + Img1.Text.Replace(@"\", @"\\") + @""""+ System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("end_image_path      = "))
+                {
+                    code += "end_image_path      = " + Image2.Replace(@"\", @"\\") + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("output_video_path   = "))
+                {
+                    code += @"output_video_path   = """ + VideoOut.Text.Replace(@"\", @"\\") + @"""" + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("video_length        = "))
+                {
+                    code += @"video_length        = " + FrameRate.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("base_resolution     = "))
+                {
+                    code += @"base_resolution     = " + Resolution.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("video_size          = "))
+                {
+                    code += @"video_size          = " + VideoRes.Text.Replace("auto","None") + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("aspect_ratio        = "))
+                {
+                    code += @"aspect_ratio        = """ + AspectRatio.Text + @"""" + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("motion              = "))
+                {
+                    code += @"motion              = """ + Motion.Text + @"""" + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("camera_direction    = "))
+                {
+                    code += @"camera_direction    = """ + Direction.Text + @"""" + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("steps               = "))
+                {
+                    code += @"steps               = " + Steps.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("cfg                 = "))
+                {
+                    code += @"cfg                 = " + Cfg.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("scheduler_name      = "))
+                {
+                    code += @"scheduler_name      = """ + Scheduler.Text + @"""" + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("low_gpu_memory_mode = "))
+                {
+                    code += @"low_gpu_memory_mode = " + LowMemoryMode.Checked.ToString() + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("gpu_offload_steps   = "))
+                {
+                    code += @"gpu_offload_steps   = " + GPUOffload.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("seed                = "))
+                {
+                    code += @"seed                = " + Seed.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("lora_path           = "))
+                {
+                    code += @"lora_path           = " + Lora + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("lora_weight         = "))
+                {
+                    code += @"lora_weight         = " + Weighttxt.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("auto_update         = "))
+                {
+                    code += @"auto_update         = " + Updates.Checked.ToString() + System.Environment.NewLine;
+                    continue;
+                }
+                code += line + System.Environment.NewLine;
+            }
+            return code;
+        }
+
+        private void ExecuteCommand()
+        {
+            string CallCode = ParsePythonCode(); 
+            if (string.IsNullOrEmpty(CallCode)) { MessageBox.Show("Bad Python Code", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             File.WriteAllText(Path.Combine("Ruyi-Models", "i2v.py"), CallCode);
             if (File.Exists(VideoOut.Text)) { File.Move(VideoOut.Text, VideoOut.Text.Replace(".mp4", "-" + GetTimestamp() + ".mp4")); }
+            LogMessages.Add("Starting Generation: ["+FrameRate.Text + "-"+ Resolution.Text +"] " + Path.GetFileName(Img1.Text) + " @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             Task.Run(() =>
             {
                 GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = false; }));
@@ -184,6 +305,7 @@ namespace Ruyi_GUI
                 process.WaitForExit();
                 process.Close();
             });
+            timer3.Enabled = true;
         }
 
         private string SelectImageButton()
@@ -266,7 +388,7 @@ namespace Ruyi_GUI
             if (string.IsNullOrEmpty(Scheduler.Text)) { MessageBox.Show("Scheduler Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (string.IsNullOrEmpty(Weighttxt.Text)) { MessageBox.Show("Lora Weight Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if(!AspectRatio.Text.Contains(":")){ MessageBox.Show("Aspect Ratio Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (!VideoRes.Text.Contains(", ") && !VideoRes.Text.Contains("None")) { MessageBox.Show("Mp4 Resolution Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!VideoRes.Text.Contains(", ") && !VideoRes.Text.Contains("None") && !VideoRes.Text.Contains("auto")) { MessageBox.Show("Mp4 Resolution Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             return true;
         }
 
@@ -393,6 +515,17 @@ namespace Ruyi_GUI
             dialog.Filter = "safetensors (*.safetensors)|*.safetensors";
             if (dialog.ShowDialog() == DialogResult.OK) { Loratxt.Text = dialog.FileName; }
             dialog.Dispose();
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            Process[] processes = Process.GetProcesses();
+            bool isPythonRunning = processes.Any(p => p.ProcessName.Equals("python", StringComparison.OrdinalIgnoreCase));
+            if (!isPythonRunning)
+            {
+                timer3.Enabled = false;
+                MessageBox.Show("python.exe is not running. Maybe it crashed, Please check the log.txt","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
     }
 }
