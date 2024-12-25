@@ -73,6 +73,7 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Updates = new System.Windows.Forms.CheckBox();
             this.Weighttxt = new System.Windows.Forms.TextBox();
             this.Weightlbl = new System.Windows.Forms.Label();
             this.LoraButton = new System.Windows.Forms.Button();
@@ -81,7 +82,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.VideoRes = new System.Windows.Forms.ComboBox();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
-            this.Updates = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -610,6 +610,16 @@
             this.panel1.Size = new System.Drawing.Size(544, 507);
             this.panel1.TabIndex = 41;
             // 
+            // Updates
+            // 
+            this.Updates.AutoSize = true;
+            this.Updates.Location = new System.Drawing.Point(382, 449);
+            this.Updates.Name = "Updates";
+            this.Updates.Size = new System.Drawing.Size(150, 17);
+            this.Updates.TabIndex = 48;
+            this.Updates.Text = "Check For Model Updates";
+            this.Updates.UseVisualStyleBackColor = true;
+            // 
             // Weighttxt
             // 
             this.Weighttxt.Location = new System.Drawing.Point(330, 422);
@@ -700,21 +710,11 @@
             this.timer3.Interval = 5000;
             this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
             // 
-            // Updates
-            // 
-            this.Updates.AutoSize = true;
-            this.Updates.Location = new System.Drawing.Point(382, 449);
-            this.Updates.Name = "Updates";
-            this.Updates.Size = new System.Drawing.Size(150, 17);
-            this.Updates.TabIndex = 48;
-            this.Updates.Text = "Check For Model Updates";
-            this.Updates.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 577);
+            this.ClientSize = new System.Drawing.Size(552, 577);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.RunJobs);
             this.Controls.Add(this.RemoveJob);
