@@ -1,6 +1,6 @@
 # Ruyi-GUI Setup Guide
 Complete Environment Download at<br>
-[Ruyi-GUI-V1.0.7z](https://mega.nz/file/GS4hjbrJ#kjpc8buBUnuw11lOTo0HwLKmzKeORvLTEO7dRsmgS5Q)
+[Ruyi-GUI-V1.0.7z](https://github.com/bmgjet/Ruyi-GUI/blob/master/Ruyi-GUI-V1.0.7z)
 
 
 ## Screenshot
