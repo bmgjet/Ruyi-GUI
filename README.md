@@ -11,6 +11,4 @@ Complete Environment Download at<br>
 ---
 
 Additional respective GitHub repositories:  
-- [Stable Diffusion WebUI Forge](https://github.com/lllyasviel/stable-diffusion-webui-forge)  
-- [Ruyi-GUI](https://github.com/bmgjet/Ruyi-GUI)  
 - [Ruyi-Models](https://github.com/IamCreateAI/Ruyi-Models)
