@@ -53,7 +53,6 @@
             this.Direction = new System.Windows.Forms.ComboBox();
             this.LowMemoryMode = new System.Windows.Forms.CheckBox();
             this.Offloadlbl = new System.Windows.Forms.Label();
-            this.GPUOffload = new System.Windows.Forms.TextBox();
             this.Samplerlbl = new System.Windows.Forms.Label();
             this.Steps = new System.Windows.Forms.TextBox();
             this.Stepslbl = new System.Windows.Forms.Label();
@@ -73,7 +72,7 @@
             this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.Updates = new System.Windows.Forms.CheckBox();
+            this.GPUOffload = new System.Windows.Forms.ComboBox();
             this.Weighttxt = new System.Windows.Forms.TextBox();
             this.Weightlbl = new System.Windows.Forms.Label();
             this.LoraButton = new System.Windows.Forms.Button();
@@ -81,6 +80,7 @@
             this.Loralbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.VideoRes = new System.Windows.Forms.ComboBox();
+            this.Updates = new System.Windows.Forms.CheckBox();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -89,7 +89,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(6, 6);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
@@ -100,7 +100,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox2.Location = new System.Drawing.Point(276, 6);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
@@ -245,9 +245,8 @@
             this.Resolution.FormattingEnabled = true;
             this.Resolution.Items.AddRange(new object[] {
             "384",
-            "480",
             "512",
-            "720",
+            "640",
             "768",
             "896"});
             this.Resolution.Location = new System.Drawing.Point(166, 372);
@@ -275,11 +274,13 @@
             this.AspectRatio.Items.AddRange(new object[] {
             "21:9",
             "16:9",
+            "5:4",
             "4:3",
             "3:2",
             "1:1",
             "2:3",
             "3:4",
+            "4:5",
             "9:16",
             "9:21"});
             this.AspectRatio.Location = new System.Drawing.Point(93, 372);
@@ -351,7 +352,7 @@
             // LowMemoryMode
             // 
             this.LowMemoryMode.AutoSize = true;
-            this.LowMemoryMode.Location = new System.Drawing.Point(113, 425);
+            this.LowMemoryMode.Location = new System.Drawing.Point(91, 424);
             this.LowMemoryMode.Margin = new System.Windows.Forms.Padding(2);
             this.LowMemoryMode.Name = "LowMemoryMode";
             this.LowMemoryMode.Size = new System.Drawing.Size(142, 17);
@@ -368,17 +369,6 @@
             this.Offloadlbl.Size = new System.Drawing.Size(100, 13);
             this.Offloadlbl.TabIndex = 23;
             this.Offloadlbl.Text = "GPU Offload Steps:";
-            // 
-            // GPUOffload
-            // 
-            this.GPUOffload.Location = new System.Drawing.Point(6, 422);
-            this.GPUOffload.Margin = new System.Windows.Forms.Padding(2);
-            this.GPUOffload.MaxLength = 2;
-            this.GPUOffload.Name = "GPUOffload";
-            this.GPUOffload.Size = new System.Drawing.Size(95, 20);
-            this.GPUOffload.TabIndex = 24;
-            this.GPUOffload.Text = "0";
-            this.GPUOffload.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Samplerlbl
             // 
@@ -495,7 +485,7 @@
             this.PlayVideo.Enabled = false;
             this.PlayVideo.Location = new System.Drawing.Point(6, 548);
             this.PlayVideo.Name = "PlayVideo";
-            this.PlayVideo.Size = new System.Drawing.Size(544, 24);
+            this.PlayVideo.Size = new System.Drawing.Size(324, 24);
             this.PlayVideo.TabIndex = 35;
             this.PlayVideo.Text = "Play Video";
             this.PlayVideo.UseVisualStyleBackColor = true;
@@ -563,7 +553,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.Updates);
+            this.panel1.Controls.Add(this.GPUOffload);
             this.panel1.Controls.Add(this.Weighttxt);
             this.panel1.Controls.Add(this.Weightlbl);
             this.panel1.Controls.Add(this.LoraButton);
@@ -581,7 +571,6 @@
             this.panel1.Controls.Add(this.Steps);
             this.panel1.Controls.Add(this.Stepslbl);
             this.panel1.Controls.Add(this.Samplerlbl);
-            this.panel1.Controls.Add(this.GPUOffload);
             this.panel1.Controls.Add(this.Offloadlbl);
             this.panel1.Controls.Add(this.LowMemoryMode);
             this.panel1.Controls.Add(this.Directionlbl);
@@ -610,19 +599,26 @@
             this.panel1.Size = new System.Drawing.Size(544, 507);
             this.panel1.TabIndex = 41;
             // 
-            // Updates
+            // GPUOffload
             // 
-            this.Updates.AutoSize = true;
-            this.Updates.Location = new System.Drawing.Point(382, 449);
-            this.Updates.Name = "Updates";
-            this.Updates.Size = new System.Drawing.Size(150, 17);
-            this.Updates.TabIndex = 48;
-            this.Updates.Text = "Check For Model Updates";
-            this.Updates.UseVisualStyleBackColor = true;
+            this.GPUOffload.FormattingEnabled = true;
+            this.GPUOffload.Items.AddRange(new object[] {
+            "0",
+            "10",
+            "7",
+            "5",
+            "1"});
+            this.GPUOffload.Location = new System.Drawing.Point(6, 422);
+            this.GPUOffload.MaxLength = 2;
+            this.GPUOffload.Name = "GPUOffload";
+            this.GPUOffload.Size = new System.Drawing.Size(80, 21);
+            this.GPUOffload.TabIndex = 48;
+            this.GPUOffload.Text = "0";
+            this.GPUOffload.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Weighttxt
             // 
-            this.Weighttxt.Location = new System.Drawing.Point(330, 422);
+            this.Weighttxt.Location = new System.Drawing.Point(314, 422);
             this.Weighttxt.Margin = new System.Windows.Forms.Padding(2);
             this.Weighttxt.MaxLength = 4;
             this.Weighttxt.Name = "Weighttxt";
@@ -634,7 +630,7 @@
             // Weightlbl
             // 
             this.Weightlbl.AutoSize = true;
-            this.Weightlbl.Location = new System.Drawing.Point(282, 426);
+            this.Weightlbl.Location = new System.Drawing.Point(266, 425);
             this.Weightlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Weightlbl.Name = "Weightlbl";
             this.Weightlbl.Size = new System.Drawing.Size(44, 13);
@@ -643,10 +639,10 @@
             // 
             // LoraButton
             // 
-            this.LoraButton.Location = new System.Drawing.Point(445, 422);
+            this.LoraButton.Location = new System.Drawing.Point(361, 422);
             this.LoraButton.Margin = new System.Windows.Forms.Padding(2);
             this.LoraButton.Name = "LoraButton";
-            this.LoraButton.Size = new System.Drawing.Size(87, 22);
+            this.LoraButton.Size = new System.Drawing.Size(171, 22);
             this.LoraButton.TabIndex = 45;
             this.LoraButton.Text = "Select";
             this.LoraButton.UseVisualStyleBackColor = true;
@@ -655,17 +651,17 @@
             // Loratxt
             // 
             this.Loratxt.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Loratxt.Location = new System.Drawing.Point(318, 400);
+            this.Loratxt.Location = new System.Drawing.Point(314, 400);
             this.Loratxt.Margin = new System.Windows.Forms.Padding(2);
             this.Loratxt.Name = "Loratxt";
             this.Loratxt.ReadOnly = true;
-            this.Loratxt.Size = new System.Drawing.Size(215, 20);
+            this.Loratxt.Size = new System.Drawing.Size(219, 20);
             this.Loratxt.TabIndex = 44;
             // 
             // Loralbl
             // 
             this.Loralbl.AutoSize = true;
-            this.Loralbl.Location = new System.Drawing.Point(282, 403);
+            this.Loralbl.Location = new System.Drawing.Point(279, 403);
             this.Loralbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Loralbl.Name = "Loralbl";
             this.Loralbl.Size = new System.Drawing.Size(31, 13);
@@ -705,6 +701,16 @@
             this.VideoRes.Text = "auto";
             this.VideoRes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.VideoRes_KeyPress);
             // 
+            // Updates
+            // 
+            this.Updates.AutoSize = true;
+            this.Updates.Location = new System.Drawing.Point(336, 553);
+            this.Updates.Name = "Updates";
+            this.Updates.Size = new System.Drawing.Size(214, 17);
+            this.Updates.TabIndex = 48;
+            this.Updates.Text = "Check For Model Updates On Generate";
+            this.Updates.UseVisualStyleBackColor = true;
+            // 
             // timer3
             // 
             this.timer3.Interval = 5000;
@@ -715,6 +721,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(552, 577);
+            this.Controls.Add(this.Updates);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.RunJobs);
             this.Controls.Add(this.RemoveJob);
@@ -735,6 +742,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -763,7 +771,6 @@
         private System.Windows.Forms.ComboBox Direction;
         private System.Windows.Forms.CheckBox LowMemoryMode;
         private System.Windows.Forms.Label Offloadlbl;
-        private System.Windows.Forms.TextBox GPUOffload;
         private System.Windows.Forms.Label Samplerlbl;
         private System.Windows.Forms.TextBox Steps;
         private System.Windows.Forms.Label Stepslbl;
@@ -792,6 +799,7 @@
         private System.Windows.Forms.Label Loralbl;
         private System.Windows.Forms.Timer timer3;
         private System.Windows.Forms.CheckBox Updates;
+        private System.Windows.Forms.ComboBox GPUOffload;
     }
 }
 

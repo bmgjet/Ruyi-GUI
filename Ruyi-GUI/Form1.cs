@@ -14,11 +14,10 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Management;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,19 +32,20 @@ namespace Ruyi_GUI
         public static Process process;
         public bool DoingJobs = false;
         public bool Not100 = true;
+        public DateTime StartTime;
 
         public Form1()
         {
             InitializeComponent();
             if (File.Exists("Config.cfg")) { LoadSettings(File.ReadAllText("Config.cfg")); }
             else { SaveSettings(); }
-            if (!File.Exists("environment.bat"))
+            if (!File.Exists("environment.bat") || !Directory.Exists("system"))
             {
-                MessageBox.Show("environment.bat file missing, Is this exe being ran from Forge Install folder?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Missing system folder and environment.bat file! \nIs this being ran from python environment?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (!Directory.Exists("Ruyi-Models-main") || !File.Exists(Path.Combine("Ruyi-Models-main", "predict_i2v.py")))
             {
-                if (MessageBox.Show("Missing predict_i2v.py! Download from Github Repo?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                if (MessageBox.Show("Missing Ruyi-Models-main!\nClone from Github Repo?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                 {
                     using (var client = new WebClient())
                     {
@@ -59,11 +59,16 @@ namespace Ruyi_GUI
                         }
                     }
                 }
-                else { return; }
             }
             if (File.Exists(Path.Combine("Ruyi-Models-main", "predict_i2v.py")))
             {
                 PythonCode = File.ReadAllLines(Path.Combine("Ruyi-Models-main", "predict_i2v.py"));
+            }
+            else
+            {
+                MessageBox.Show("Missing predict_i2v.py file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                GenerateButton.Enabled = false;
+                Batch.Enabled = false;
             }
         }
 
@@ -97,7 +102,7 @@ namespace Ruyi_GUI
             }
             catch
             {
-                MessageBox.Show("Fault loading Config.cfg, Maybe Try Delete it so it can regenerate.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Fault loading Config.cfg.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (File.Exists(Img1.Text)) { pictureBox1.BackgroundImage = new Bitmap(Img1.Text); }
             if (File.Exists(Img2.Text)) { pictureBox2.BackgroundImage = new Bitmap(Img2.Text); }
@@ -129,10 +134,7 @@ namespace Ruyi_GUI
             return Path.GetDirectoryName(path);
         }
 
-        public byte[] GetHash(string inputString)
-        {
-            using (HashAlgorithm algorithm = SHA256.Create()) { return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString)); }
-        }
+        public byte[] GetHash(string inputString) { using (HashAlgorithm algorithm = SHA256.Create()) { return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString)); } }
 
         public string GetHashString(string inputString)
         {
@@ -155,7 +157,9 @@ namespace Ruyi_GUI
                 AppendTextBox("Saving Mp4...");
                 GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = true; }));
                 panel1.BeginInvoke(new Action(() => { panel1.Enabled = true; }));
-                LogMessages.Add("Finished Generation @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                Updates.BeginInvoke(new Action(() => { Updates.Enabled = true; }));
+                var Elapsed = DateTime.Now - StartTime;
+                LogMessages.Add("Finished Generation @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "[" + Math.Round(Elapsed.TotalSeconds, 2) + "s]");
                 if (DoingJobs)
                 {
                     while (!File.Exists(VideoOut.Text)) { Thread.Sleep(1000); }
@@ -301,13 +305,15 @@ namespace Ruyi_GUI
             if (string.IsNullOrEmpty(CallCode)) { MessageBox.Show("Bad Python Code", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             File.WriteAllText(Path.Combine("Ruyi-Models-main", "i2v.py"), CallCode);
             if (File.Exists(VideoOut.Text)) { File.Move(VideoOut.Text, VideoOut.Text.Replace(".mp4", "-" + GetTimestamp() + ".mp4")); }
-            LogMessages.Add("Starting Generation: [" + FrameRate.Text + "-" + Resolution.Text + "] " + Path.GetFileName(Img1.Text) + " @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            StartTime = DateTime.Now;
+            LogMessages.Add("Starting Generation: [" + FrameRate.Text + "-" + Resolution.Text + "-"+(LowMemoryMode.Checked ?"Lowmem" : "Normal") + "-"+GPUOffload.Text + "] " + Path.GetFileName(Img1.Text) + " @ " + StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
             Task.Run(() =>
             {
                 GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = false; }));
                 panel1.BeginInvoke(new Action(() => { panel1.Enabled = false; }));
+                Updates.BeginInvoke(new Action(() => { Updates.Enabled = false; }));
                 AppendTextBox("Loading AI Please Wait...");
-                var processInfo = new ProcessStartInfo("cmd.exe", "/c call " + Path.Combine(AssemblyDirectory(), "environment.bat") + " && cd " + Path.Combine(AssemblyDirectory(), "Ruyi-Models-main") + " && python i2v.py %*");
+                var processInfo = new ProcessStartInfo("cmd.exe", "/c call " + Path.Combine(AssemblyDirectory(), "environment.bat") + " && cd " + Path.Combine(AssemblyDirectory(), "Ruyi-Models-main") + " && python i2v.py");
                 processInfo.CreateNoWindow = true;
                 processInfo.UseShellExecute = false;
                 processInfo.RedirectStandardError = true;
@@ -364,37 +370,46 @@ namespace Ruyi_GUI
             saveFileDialog1.ShowDialog();
             VideoOut.Text = saveFileDialog1.FileName;
         }
+        private string GetCommandLineArgs(int processId)
+        {
+            try
+            {
+                using (var searcher = new ManagementObjectSearcher($"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {processId}"))
+                {
+                    foreach (ManagementObject obj in searcher.Get()) { return obj["CommandLine"]?.ToString(); }
+                }
+            }
+            catch { }
+            return "";
+        }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            timer1.Enabled = false;
             SaveSettings();
-            if (process != null)
-            {
-                try { process.Kill(); } catch { }
-            }
+            if (process != null) { try { process.Kill(); } catch { } }
             Process[] processes = Process.GetProcesses();
-            bool isPythonRunning = processes.Any(p => p.ProcessName.Equals("python", StringComparison.OrdinalIgnoreCase));
-            if (isPythonRunning)
+            foreach (var process in processes)
             {
-                if (MessageBox.Show("python.exe is running. Do you want to close it?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                if (process.ProcessName.Equals("python", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var process in processes)
+                    if (GetCommandLineArgs(process.Id).Contains("i2v.py"))
                     {
-                        if (process.ProcessName.Equals("python", StringComparison.OrdinalIgnoreCase))
+                        if (MessageBox.Show(@"""python i2v.py"" is running. Do you want to close it?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                         {
+                            LogMessages.Add("Terminating Python Process");
                             process.Kill();
                         }
                     }
                 }
             }
+            File.AppendAllLines("log.txt", LogMessages);
+            LogMessages.Clear();
         }
 
         private void PlayVideo_Click(object sender, EventArgs e)
         {
-            if (File.Exists(VideoOut.Text))
-            {
-                System.Diagnostics.Process.Start(VideoOut.Text);
-            }
+            if (File.Exists(VideoOut.Text)) { System.Diagnostics.Process.Start(VideoOut.Text); }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -426,6 +441,11 @@ namespace Ruyi_GUI
             if (string.IsNullOrEmpty(Weighttxt.Text)) { MessageBox.Show("Lora Weight Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!AspectRatio.Text.Contains(":")) { MessageBox.Show("Aspect Ratio Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!VideoRes.Text.Contains(", ") && !VideoRes.Text.Contains("None") && !VideoRes.Text.Contains("auto")) { MessageBox.Show("Mp4 Resolution Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (int.TryParse(FrameRate.Text, out int FPS)) { if (FPS < 24 || FPS > 120) { MessageBox.Show("Invalid Video Frames Setting [24-120]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
+            if (int.TryParse(Resolution.Text, out int RES)) { if (RES < 384 || RES > 896) { MessageBox.Show("Invalid Generation Resolution Setting [384-896]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
+            if (!GPUOffload.Items.Contains(GPUOffload.Text)) { MessageBox.Show("Invalid GPU Offload Steps Setting [0, 10, 7, 5, 1]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!Direction.Items.Contains(Direction.Text)) { MessageBox.Show("Invalid Camera Direction Setting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!Motion.Items.Contains(Motion.Text)) { MessageBox.Show("Invalid Motion Setting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             return true;
         }
 
@@ -565,6 +585,7 @@ namespace Ruyi_GUI
                 MessageBox.Show("python.exe is not running. Maybe it crashed, Please check the log.txt", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 GenerateButton.Enabled = true;
                 panel1.Enabled = true;
+                Updates.Enabled = true;
                 RunJobs.Enabled = true;
                 JobList.Enabled = true;
                 AddJob.Enabled = true;
