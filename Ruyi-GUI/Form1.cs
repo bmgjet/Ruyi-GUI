@@ -16,6 +16,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Management;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,21 +34,23 @@ namespace Ruyi_GUI
         public bool DoingJobs = false;
         public bool Not100 = true;
         public DateTime StartTime;
-        public bool SMIInstalled = false;
         public string GPUInfo;
+        public int MaxVram = 0;
 
         public Form1()
         {
             InitializeComponent();
+            if (File.Exists("Lang.cfg")) { LoadLangFile(this.Controls, File.ReadAllLines("Lang.cfg")); }
+            else { SaveLangFile(); }
             if (File.Exists("Config.cfg")) { LoadSettings(File.ReadAllText("Config.cfg")); }
             else { SaveSettings(); }
             if (!File.Exists("environment.bat") || !Directory.Exists("system"))
             {
-                MessageBox.Show("Missing system folder and environment.bat file! \nIs this being ran from python environment?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(MissingSystemlbl.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             if (!Directory.Exists("Ruyi-Models-main") || !File.Exists(Path.Combine("Ruyi-Models-main", "predict_i2v.py")))
             {
-                if (MessageBox.Show("Missing Ruyi-Models-main!\nClone from Github Repo?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                if (MessageBox.Show(MissingRuyilbl.Text, Errorlbl.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                 {
                     using (var client = new WebClient())
                     {
@@ -65,21 +68,59 @@ namespace Ruyi_GUI
             if (File.Exists(Path.Combine("Ruyi-Models-main", "predict_i2v.py")))
             {
                 PythonCode = File.ReadAllLines(Path.Combine("Ruyi-Models-main", "predict_i2v.py"));
+                if (File.Exists("nvidia-smi.exe") && NvidiaSMI() != null) { GPUPerf.Enabled = true; }
             }
             else
             {
-                MessageBox.Show("Missing predict_i2v.py file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(MissingPredictlbl.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 GenerateButton.Enabled = false;
                 Batch.Enabled = false;
             }
-            if(File.Exists("nvidia-smi.exe") && NvidiaSMI() != null){SMIInstalled = true;}
         }
 
-        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked; }
+        private void RetrieveControlTexts(Control.ControlCollection controls, Dictionary<string, string> controlTexts)
+        {
+            foreach (Control control in controls)
+            {
+                if (control is Label || control is Button) { controlTexts.Add(control.Name, control.Text); }
+                if (control.HasChildren) { RetrieveControlTexts(control.Controls, controlTexts); }
+            }
+        }
+
+        private void SaveLangFile()
+        {
+            Dictionary<string, string> controlTexts = new Dictionary<string, string>();
+            RetrieveControlTexts(this.Controls, controlTexts);
+            using (StreamWriter writer = new StreamWriter("Lang.cfg"))
+            {
+                foreach (var kvp in controlTexts) { writer.WriteLine($"{kvp.Key},{kvp.Value}"); }
+            }
+        }
+
+        private void LoadLangFile(Control.ControlCollection controls, string[] strings)
+        {
+            foreach (Control control in controls)
+            {
+                if (control is Label || control is Button)
+                {
+                    foreach (string s in strings)
+                    {
+                        if (s.StartsWith(control.Name))
+                        {
+                            control.Text = s.Replace(control.Name + ",", "");
+                            break;
+                        }
+                    }
+                }
+                if (control.HasChildren) { LoadLangFile(control.Controls, strings); }
+            }
+        }
+
+        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked + "|" + discordhook.Text; }
 
         private void SaveSettings() { File.WriteAllText("Config.cfg", SettingsString()); }
 
-        private void LoadSettings(string Settings)
+        private void LoadSettings(string Settings, bool ShowError = true)
         {
             try
             {
@@ -102,38 +143,39 @@ namespace Ruyi_GUI
                 Loratxt.Text = SSettings[15];
                 Weighttxt.Text = SSettings[16];
                 Updates.Checked = bool.Parse(SSettings[17]);
+                discordhook.Text = SSettings[18];
             }
             catch
             {
-                MessageBox.Show("Fault loading Config.cfg.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ShowError)
+                {
+                    MessageBox.Show(FaultLoadinglbl.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             if (File.Exists(Img1.Text)) { pictureBox1.BackgroundImage = new Bitmap(Img1.Text); }
+            else { pictureBox1.BackgroundImage = null; }
             if (File.Exists(Img2.Text)) { pictureBox2.BackgroundImage = new Bitmap(Img2.Text); }
             else { pictureBox2.BackgroundImage = null; }
         }
 
         private string[] NvidiaSMI()
         {
-            string[] parts;
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "cmd.exe",
                 Arguments = "/c nvidia-smi --query-gpu=temperature.gpu,memory.used,utilization.gpu --format=csv,noheader,nounits",
-                RedirectStandardOutput = true, // Capture the output
-                UseShellExecute = false,      // Do not use shell
-                CreateNoWindow = true         // Run without creating a console window
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
-
             using (Process process = new Process { StartInfo = startInfo })
             {
                 process.Start();
-
-                // Read the output from the command
                 string output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
-                parts = output.TrimEnd('\r', '\n').Replace(" ","").Split(',');
+                string[] parts = output.TrimEnd('\r', '\n').Replace(" ", "").Split(',');
+                if (parts.Length == 3) { return parts; }
             }
-            if (parts.Length == 3){return parts;}
             return null;
         }
 
@@ -151,7 +193,7 @@ namespace Ruyi_GUI
                 this.Invoke(new Action<string>(AppendTextBox), new object[] { value });
                 return;
             }
-            this.Text = "Ruyi-GUI " + value + GPUInfo;
+            this.Text = "Ruyi-GUI " + value;
         }
 
         private string AssemblyDirectory()
@@ -174,46 +216,36 @@ namespace Ruyi_GUI
         private void LogFiltered(string message)
         {
             if (string.IsNullOrEmpty(message)) { return; }
-            LogMessages.Add(message + GPUInfo);
-            if (message.Contains("%") || message.StartsWith("Fetching ")) { AppendTextBox(message); }
-            if (message.StartsWith("Fetching ")) { return; }
+            if (message.Contains("%|")) { LogMessages.Add(message + GPUInfo); }
+            else { LogMessages.Add(message); }
+            if (message.StartsWith("Fetching ")) { AppendTextBox(message); return; }
+            if (message.Contains("%")) { AppendTextBox(message + GPUInfo); }
             if (message.Contains("100%") && Not100) { Not100 = false; return; }
             if (message.Contains("100%"))
             {
                 Not100 = true;
-                timer3.Enabled = false;
+                CrashChecker.Enabled = false;
                 AppendTextBox("Saving Mp4...");
-                GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = true; }));
-                panel1.BeginInvoke(new Action(() => { panel1.Enabled = true; }));
-                Updates.BeginInvoke(new Action(() => { Updates.Enabled = true; }));
                 var Elapsed = DateTime.Now - StartTime;
+                if (GPUPerf.Enabled && MaxVram > 0) { LogMessages.Add("Max Vram Usage: [" + MaxVram + "MB]"); }
                 LogMessages.Add("Finished Generation @ " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "[" + Math.Round(Elapsed.TotalSeconds, 2) + "s]");
                 if (DoingJobs)
                 {
-                    while (!File.Exists(VideoOut.Text)) { Thread.Sleep(1000); }
+                    while (!File.Exists(VideoOut.Text)) { Thread.Sleep(500); }
                     DoingJobs = false;
                     string Job = Path.Combine("Jobs", JobList.Items[0].ToString());
                     if (File.Exists(Job)) { File.Delete(Job); }
                     JobList.Items.RemoveAt(0);
+                    if (!string.IsNullOrEmpty(discordhook.Text) && discordhook.Text.StartsWith(@"https://discord.")) { DiscordPostFile(discordhook.Text, VideoOut.Text); }
                     return;
                 }
                 Task.Run(() =>
                 {
-                    while (!File.Exists(VideoOut.Text)) { Thread.Sleep(1000); }
+                    while (!File.Exists(VideoOut.Text)) { Thread.Sleep(500); }
+                    ControlsUpdate(true);
                     AppendTextBox("");
                 });
             }
-        }
-
-        public static string Decompress(byte[] data)
-        {
-            MemoryStream input = new MemoryStream(data);
-            MemoryStream output = new MemoryStream();
-            using (DeflateStream dstream = new DeflateStream(input, CompressionMode.Decompress))
-            {
-                dstream.CopyTo(output);
-            }
-            return Convert.ToBase64String(output.ToArray());
         }
 
         private void GenerateButton_Click(object sender, EventArgs e)
@@ -232,94 +264,94 @@ namespace Ruyi_GUI
             string Lora = string.IsNullOrEmpty(Loratxt.Text) ? "None" : @"""" + Loratxt.Text.Replace(@"\", @"\\") + @"""";
             foreach (string line in PythonCode)
             {
-                if (line.StartsWith("start_image_path    = "))
+                if (line.StartsWith("start_image_path"))
                 {
-                    code += @"start_image_path    = """ + Img1.Text.Replace(@"\", @"\\") + @"""" + System.Environment.NewLine;
+                    code += @"start_image_path = """ + Img1.Text.Replace(@"\", @"\\") + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("end_image_path      = "))
+                if (line.StartsWith("end_image_path"))
                 {
-                    code += "end_image_path      = " + Image2.Replace(@"\", @"\\") + System.Environment.NewLine;
+                    code += "end_image_path = " + Image2.Replace(@"\", @"\\") + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("output_video_path   = "))
+                if (line.StartsWith("output_video_path"))
                 {
-                    code += @"output_video_path   = """ + VideoOut.Text.Replace(@"\", @"\\") + @"""" + System.Environment.NewLine;
+                    code += @"output_video_path = """ + VideoOut.Text.Replace(@"\", @"\\") + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("video_length        = "))
+                if (line.StartsWith("video_length"))
                 {
-                    code += @"video_length        = " + FrameRate.Text + System.Environment.NewLine;
+                    code += @"video_length = " + FrameRate.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("base_resolution     = "))
+                if (line.StartsWith("base_resolution"))
                 {
-                    code += @"base_resolution     = " + Resolution.Text + System.Environment.NewLine;
+                    code += @"base_resolution = " + Resolution.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("video_size          = "))
+                if (line.StartsWith("video_size"))
                 {
-                    code += @"video_size          = " + VideoRes.Text.Replace("auto", "None") + System.Environment.NewLine;
+                    code += @"video_size = " + VideoRes.Text.Replace("auto", "None") + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("aspect_ratio        = "))
+                if (line.StartsWith("aspect_ratio"))
                 {
-                    code += @"aspect_ratio        = """ + AspectRatio.Text + @"""" + System.Environment.NewLine;
+                    code += @"aspect_ratio = """ + AspectRatio.Text + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("motion              = "))
+                if (line.StartsWith("motion"))
                 {
-                    code += @"motion              = """ + Motion.Text + @"""" + System.Environment.NewLine;
+                    code += @"motion = """ + Motion.Text + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("camera_direction    = "))
+                if (line.StartsWith("camera_direction"))
                 {
-                    code += @"camera_direction    = """ + Direction.Text + @"""" + System.Environment.NewLine;
+                    code += @"camera_direction = """ + Direction.Text + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("steps               = "))
+                if (line.StartsWith("steps"))
                 {
-                    code += @"steps               = " + Steps.Text + System.Environment.NewLine;
+                    code += @"steps = " + Steps.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("cfg                 = "))
+                if (line.StartsWith("cfg"))
                 {
-                    code += @"cfg                 = " + Cfg.Text + System.Environment.NewLine;
+                    code += @"cfg = " + Cfg.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("scheduler_name      = "))
+                if (line.StartsWith("scheduler_name"))
                 {
-                    code += @"scheduler_name      = """ + Scheduler.Text + @"""" + System.Environment.NewLine;
+                    code += @"scheduler_name = """ + Scheduler.Text + @"""" + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("low_gpu_memory_mode = "))
+                if (line.StartsWith("low_gpu_memory_mode"))
                 {
                     code += @"low_gpu_memory_mode = " + LowMemoryMode.Checked.ToString() + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("gpu_offload_steps   = "))
+                if (line.StartsWith("gpu_offload_steps"))
                 {
-                    code += @"gpu_offload_steps   = " + GPUOffload.Text + System.Environment.NewLine;
+                    code += @"gpu_offload_steps = " + GPUOffload.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("seed                = "))
+                if (line.StartsWith("seed"))
                 {
-                    code += @"seed                = " + Seed.Text + System.Environment.NewLine;
+                    code += @"seed = " + Seed.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("lora_path           = "))
+                if (line.StartsWith("lora_path"))
                 {
-                    code += @"lora_path           = " + Lora + System.Environment.NewLine;
+                    code += @"lora_path = " + Lora + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("lora_weight         = "))
+                if (line.StartsWith("lora_weight"))
                 {
-                    code += @"lora_weight         = " + Weighttxt.Text + System.Environment.NewLine;
+                    code += @"lora_weight = " + Weighttxt.Text + System.Environment.NewLine;
                     continue;
                 }
-                if (line.StartsWith("auto_update         = "))
+                if (line.StartsWith("auto_update"))
                 {
-                    code += @"auto_update         = " + Updates.Checked.ToString() + System.Environment.NewLine;
+                    code += @"auto_update = " + Updates.Checked.ToString() + System.Environment.NewLine;
                     continue;
                 }
                 code += line + System.Environment.NewLine;
@@ -330,17 +362,16 @@ namespace Ruyi_GUI
         private void ExecuteCommand()
         {
             string CallCode = ParsePythonCode();
-            if (string.IsNullOrEmpty(CallCode)) { MessageBox.Show("Bad Python Code", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+            if (string.IsNullOrEmpty(CallCode)) { return; }
             File.WriteAllText(Path.Combine("Ruyi-Models-main", "i2v.py"), CallCode);
             if (File.Exists(VideoOut.Text)) { File.Move(VideoOut.Text, VideoOut.Text.Replace(".mp4", "-" + GetTimestamp() + ".mp4")); }
             StartTime = DateTime.Now;
-            LogMessages.Add("Starting Generation: [" + FrameRate.Text + "-" + Resolution.Text + "-"+(LowMemoryMode.Checked ?"Lowmem" : "Normal") + "-"+GPUOffload.Text + "] " + Path.GetFileName(Img1.Text) + " @ " + StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            LogMessages.Add("Starting Generation: [" + FrameRate.Text + "-" + Resolution.Text + "-" + (LowMemoryMode.Checked ? "Lowmem" : "Normal") + "-" + GPUOffload.Text + "] " + Path.GetFileName(Img1.Text) + " @ " + StartTime.ToString("yyyy-MM-dd HH:mm:ss"));
             Task.Run(() =>
             {
-                GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = false; }));
-                panel1.BeginInvoke(new Action(() => { panel1.Enabled = false; }));
-                Updates.BeginInvoke(new Action(() => { Updates.Enabled = false; }));
-                AppendTextBox("Loading AI Please Wait...");
+                MaxVram = 0;
+                ControlsUpdate(false);
+                AppendTextBox(LoadingAilbl.Text);
                 var processInfo = new ProcessStartInfo("cmd.exe", "/c call " + Path.Combine(AssemblyDirectory(), "environment.bat") + " && cd " + Path.Combine(AssemblyDirectory(), "Ruyi-Models-main") + " && python i2v.py");
                 processInfo.CreateNoWindow = true;
                 processInfo.UseShellExecute = false;
@@ -354,7 +385,7 @@ namespace Ruyi_GUI
                 process.WaitForExit();
                 process.Close();
             });
-            timer3.Enabled = true;
+            CrashChecker.Enabled = true;
         }
 
         private string SelectImageButton()
@@ -398,6 +429,7 @@ namespace Ruyi_GUI
             saveFileDialog1.ShowDialog();
             VideoOut.Text = saveFileDialog1.FileName;
         }
+
         private string GetCommandLineArgs(int processId)
         {
             try
@@ -413,7 +445,10 @@ namespace Ruyi_GUI
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            timer1.Enabled = false;
+            FileWatch.Enabled = false;
+            JobsTimer.Enabled = false;
+            CrashChecker.Enabled = false;
+            GPUPerf.Enabled = false;
             SaveSettings();
             if (process != null) { try { process.Kill(); } catch { } }
             Process[] processes = Process.GetProcesses();
@@ -423,7 +458,7 @@ namespace Ruyi_GUI
                 {
                     if (GetCommandLineArgs(process.Id).Contains("i2v.py"))
                     {
-                        if (MessageBox.Show(@"""python i2v.py"" is running. Do you want to close it?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                        if (MessageBox.Show(@"""python i2v.py"" " + IsRunninglbl.Text, Errorlbl.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                         {
                             LogMessages.Add("Terminating Python Process");
                             process.Kill();
@@ -431,8 +466,11 @@ namespace Ruyi_GUI
                     }
                 }
             }
-            File.AppendAllLines("log.txt", LogMessages);
-            LogMessages.Clear();
+            if (LogMessages.Count > 0)
+            {
+                File.AppendAllLines("log.txt", LogMessages);
+                LogMessages.Clear();
+            }
         }
 
         private void PlayVideo_Click(object sender, EventArgs e)
@@ -440,7 +478,7 @@ namespace Ruyi_GUI
             if (File.Exists(VideoOut.Text)) { System.Diagnostics.Process.Start(VideoOut.Text); }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void FileWatch_Tick(object sender, EventArgs e)
         {
             if (File.Exists(VideoOut.Text)) { PlayVideo.Enabled = true; }
             else { PlayVideo.Enabled = false; }
@@ -449,40 +487,31 @@ namespace Ruyi_GUI
                 File.AppendAllLines("log.txt", LogMessages);
                 LogMessages.Clear();
             }
-          if(SMIInstalled)
-            {
-                string[] Output = NvidiaSMI();
-                if(Output != null)
-                {
-                    GPUInfo = " GPU:" + Output[2] + "% " + Output[0] + "C " + Output[1] + "MB";
-                    this.Text = this.Text.Split(new string[] {" GPU:"}, StringSplitOptions.RemoveEmptyEntries)[0] + GPUInfo;
-                }
-            }
-    }
+        }
 
         private bool ValidateInOut()
         {
-            if (string.IsNullOrEmpty(VideoOut.Text)) { MessageBox.Show("You Must Select A Video Output", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Img1.Text)) { MessageBox.Show("You Must Select A Input Image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(FrameRate.Text)) { MessageBox.Show("Frame Rate Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(AspectRatio.Text)) { MessageBox.Show("Aspect Ratio Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Resolution.Text)) { MessageBox.Show("Resolution Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Direction.Text)) { MessageBox.Show("Direction Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Motion.Text)) { MessageBox.Show("Motion Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(VideoRes.Text)) { MessageBox.Show("Mp4 Resolution Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(GPUOffload.Text)) { MessageBox.Show("GPU Offload Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Steps.Text)) { MessageBox.Show("Steps Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Cfg.Text)) { MessageBox.Show("Cfg Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Seed.Text)) { MessageBox.Show("Seed Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Scheduler.Text)) { MessageBox.Show("Scheduler Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (string.IsNullOrEmpty(Weighttxt.Text)) { MessageBox.Show("Lora Weight Can't Be Null", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (!AspectRatio.Text.Contains(":")) { MessageBox.Show("Aspect Ratio Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (!VideoRes.Text.Contains(", ") && !VideoRes.Text.Contains("None") && !VideoRes.Text.Contains("auto")) { MessageBox.Show("Mp4 Resolution Not Valid Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (int.TryParse(FrameRate.Text, out int FPS)) { if (FPS < 24 || FPS > 120) { MessageBox.Show("Invalid Video Frames Setting [24-120]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
-            if (int.TryParse(Resolution.Text, out int RES)) { if (RES < 384 || RES > 896) { MessageBox.Show("Invalid Generation Resolution Setting [384-896]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
-            if (!GPUOffload.Items.Contains(GPUOffload.Text)) { MessageBox.Show("Invalid GPU Offload Steps Setting [0, 10, 7, 5, 1]", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (!Direction.Items.Contains(Direction.Text)) { MessageBox.Show("Invalid Camera Direction Setting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
-            if (!Motion.Items.Contains(Motion.Text)) { MessageBox.Show("Invalid Motion Setting", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(VideoOut.Text)) { MessageBox.Show(Error1.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Img1.Text)) { MessageBox.Show(Error2.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(FrameRate.Text)) { MessageBox.Show(Error3.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(AspectRatio.Text)) { MessageBox.Show(Error4.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Resolution.Text)) { MessageBox.Show(Error5.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Direction.Text)) { MessageBox.Show(Error6.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Motion.Text)) { MessageBox.Show(Error7.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(VideoRes.Text)) { MessageBox.Show(Error8.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(GPUOffload.Text)) { MessageBox.Show(Error9.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Steps.Text)) { MessageBox.Show(Error10.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Cfg.Text)) { MessageBox.Show(Error11.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Seed.Text)) { MessageBox.Show(Error12.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Scheduler.Text)) { MessageBox.Show(Error13.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(Weighttxt.Text)) { MessageBox.Show(Error14.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!AspectRatio.Text.Contains(":")) { MessageBox.Show(Error15.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!VideoRes.Text.Contains(", ") && !VideoRes.Text.Contains("None") && !VideoRes.Text.Contains("auto")) { MessageBox.Show(Error16.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (int.TryParse(FrameRate.Text, out int FPS)) { if (FPS < 24 || FPS > 120) { MessageBox.Show(Error17.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
+            if (int.TryParse(Resolution.Text, out int RES)) { if (RES < 384 || RES > 896) { MessageBox.Show(Error18.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; } }
+            if (!GPUOffload.Items.Contains(GPUOffload.Text)) { MessageBox.Show(Error19.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!Direction.Items.Contains(Direction.Text)) { MessageBox.Show(Error20.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!Motion.Items.Contains(Motion.Text)) { MessageBox.Show(Error21.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             return true;
         }
 
@@ -509,15 +538,11 @@ namespace Ruyi_GUI
 
         private void RunJobs_Click(object sender, EventArgs e)
         {
-            timer2.Enabled = true;
-            RunJobs.Enabled = false;
-            JobList.Enabled = false;
-            AddJob.Enabled = false;
-            RemoveJob.Enabled = false;
+            JobsTimer.Enabled = true;
             JobList.SelectedIndex = -1;
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void JobsTimer_Tick(object sender, EventArgs e)
         {
             if (DoingJobs) { return; }
             if (JobList.Items.Count > 0)
@@ -530,14 +555,24 @@ namespace Ruyi_GUI
             else
             {
                 AppendTextBox("");
-                RunJobs.Enabled = true;
-                JobList.Enabled = true;
-                AddJob.Enabled = true;
-                RemoveJob.Enabled = true;
-                timer2.Enabled = false;
+                ControlsUpdate(true);
+                JobsTimer.Enabled = false;
                 DoingJobs = false;
                 return;
             }
+        }
+
+        private void ControlsUpdate(bool set)
+        {
+            RunJobs.BeginInvoke(new Action(() => { RunJobs.Enabled = set; }));
+            JobList.BeginInvoke(new Action(() => { JobList.Enabled = set; }));
+            discordhook.BeginInvoke(new Action(() => { discordhook.Enabled = set; }));
+            discordlbl.BeginInvoke(new Action(() => { discordlbl.Enabled = set; }));
+            AddJob.BeginInvoke(new Action(() => { AddJob.Enabled = set; }));
+            RemoveJob.BeginInvoke(new Action(() => { RemoveJob.Enabled = set; }));
+            GenerateButton.BeginInvoke(new Action(() => { GenerateButton.Enabled = set; }));
+            panel1.BeginInvoke(new Action(() => { panel1.Enabled = set; }));
+            Updates.BeginInvoke(new Action(() => { Updates.Enabled = set; }));
         }
 
         private void UpdateJobList(bool Force = false)
@@ -546,7 +581,7 @@ namespace Ruyi_GUI
             int index = (JobList.SelectedIndex == -1) ? 0 : JobList.SelectedIndex;
             if (File.Exists(Path.Combine("Jobs", JobList.Items[index].ToString())))
             {
-                LoadSettings(File.ReadAllText(Path.Combine("Jobs", JobList.Items[index].ToString())));
+                LoadSettings(File.ReadAllText(Path.Combine("Jobs", JobList.Items[index].ToString())), false);
             }
         }
 
@@ -554,14 +589,13 @@ namespace Ruyi_GUI
 
         private void Batch_Click(object sender, EventArgs e)
         {
-            if (this.Width == 810) { this.Width = 572; JobList.Items.Clear(); GenerateButton.Enabled = true; }
+            if (this.Width == 810) { this.Width = 572; JobList.Items.Clear(); }
             else
             {
-                GenerateButton.Enabled = false;
                 if (Directory.Exists("Jobs"))
                 {
                     DirectoryInfo d = new DirectoryInfo("Jobs");
-                    FileInfo[] Files = d.GetFiles("*"); //Getting Text files
+                    FileInfo[] Files = d.GetFiles("*");
                     foreach (FileInfo file in Files)
                     {
                         if (file.Name.Length == 64)
@@ -611,25 +645,46 @@ namespace Ruyi_GUI
             dialog.Dispose();
         }
 
-        private void timer3_Tick(object sender, EventArgs e)
+        private void CrashChecker_Tick(object sender, EventArgs e)
         {
             Process[] processes = Process.GetProcesses();
             bool isPythonRunning = processes.Any(p => p.ProcessName.Equals("python", StringComparison.OrdinalIgnoreCase));
             if (!isPythonRunning)
             {
-                AppendTextBox("Error");
-                timer3.Enabled = false;
-                MessageBox.Show("python.exe is not running. Maybe it crashed, Please check the log.txt", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                GenerateButton.Enabled = true;
-                panel1.Enabled = true;
-                Updates.Enabled = true;
-                RunJobs.Enabled = true;
-                JobList.Enabled = true;
-                AddJob.Enabled = true;
-                RemoveJob.Enabled = true;
-                timer2.Enabled = false;
+                AppendTextBox(Errorlbl.Text);
+                CrashChecker.Enabled = false;
+                ControlsUpdate(true);
+                JobsTimer.Enabled = false;
                 DoingJobs = false;
-                timer2.Enabled = false;
+                MessageBox.Show(Error22.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void DiscordPostFile(string url, string FilePath)
+        {
+            try
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    MultipartFormDataContent form = new MultipartFormDataContent();
+                    var file_bytes = System.IO.File.ReadAllBytes(FilePath);
+                    string FileName = Path.GetFileName(FilePath);
+                    form.Add(new ByteArrayContent(file_bytes, 0, file_bytes.Length), "png-" + FileName, FileName);
+                    httpClient.PostAsync(url, form).Wait();
+                    LogMessages.Add("Posted Video To Discord Webhook");
+                }
+            }
+            catch (Exception ex) { LogMessages.Add("[Discord] " + ex.ToString()); }
+        }
+
+        private void GPUPerf_Tick(object sender, EventArgs e)
+        {
+            string[] Output = NvidiaSMI();
+            if (Output != null)
+            {
+                GPUInfo = " [GPU:" + Output[2] + "% " + Output[0] + "C " + Output[1] + "MB]";
+                if (int.TryParse(Output[1], out int Vram)) { if (Vram > MaxVram) { MaxVram = Vram; } }
+                this.Text = this.Text.Split(new string[] { " [GPU:" }, StringSplitOptions.RemoveEmptyEntries)[0] + GPUInfo;
             }
         }
     }

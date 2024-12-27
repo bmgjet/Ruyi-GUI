@@ -64,12 +64,12 @@
             this.Scheduler = new System.Windows.Forms.ComboBox();
             this.GenerateButton = new System.Windows.Forms.Button();
             this.PlayVideo = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.FileWatch = new System.Windows.Forms.Timer(this.components);
             this.AddJob = new System.Windows.Forms.Button();
             this.JobList = new System.Windows.Forms.ListBox();
             this.RemoveJob = new System.Windows.Forms.Button();
             this.RunJobs = new System.Windows.Forms.Button();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.JobsTimer = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.GPUOffload = new System.Windows.Forms.ComboBox();
@@ -78,10 +78,42 @@
             this.LoraButton = new System.Windows.Forms.Button();
             this.Loratxt = new System.Windows.Forms.TextBox();
             this.Loralbl = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.Mp4Reslbl = new System.Windows.Forms.Label();
             this.VideoRes = new System.Windows.Forms.ComboBox();
             this.Updates = new System.Windows.Forms.CheckBox();
-            this.timer3 = new System.Windows.Forms.Timer(this.components);
+            this.CrashChecker = new System.Windows.Forms.Timer(this.components);
+            this.GPUPerf = new System.Windows.Forms.Timer(this.components);
+            this.discordlbl = new System.Windows.Forms.Label();
+            this.discordhook = new System.Windows.Forms.TextBox();
+            this.Errorlbl = new System.Windows.Forms.Label();
+            this.MissingSystemlbl = new System.Windows.Forms.Label();
+            this.MissingRuyilbl = new System.Windows.Forms.Label();
+            this.MissingPredictlbl = new System.Windows.Forms.Label();
+            this.FaultLoadinglbl = new System.Windows.Forms.Label();
+            this.LoadingAilbl = new System.Windows.Forms.Label();
+            this.IsRunninglbl = new System.Windows.Forms.Label();
+            this.Error1 = new System.Windows.Forms.Label();
+            this.Error2 = new System.Windows.Forms.Label();
+            this.Error3 = new System.Windows.Forms.Label();
+            this.Error4 = new System.Windows.Forms.Label();
+            this.Error5 = new System.Windows.Forms.Label();
+            this.Error6 = new System.Windows.Forms.Label();
+            this.Error7 = new System.Windows.Forms.Label();
+            this.Error8 = new System.Windows.Forms.Label();
+            this.Error9 = new System.Windows.Forms.Label();
+            this.Error10 = new System.Windows.Forms.Label();
+            this.Error11 = new System.Windows.Forms.Label();
+            this.Error12 = new System.Windows.Forms.Label();
+            this.Error13 = new System.Windows.Forms.Label();
+            this.Error14 = new System.Windows.Forms.Label();
+            this.Error15 = new System.Windows.Forms.Label();
+            this.Error16 = new System.Windows.Forms.Label();
+            this.Error17 = new System.Windows.Forms.Label();
+            this.Error18 = new System.Windows.Forms.Label();
+            this.Error19 = new System.Windows.Forms.Label();
+            this.Error20 = new System.Windows.Forms.Label();
+            this.Error21 = new System.Windows.Forms.Label();
+            this.Error22 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -270,7 +302,6 @@
             // 
             // AspectRatio
             // 
-            this.AspectRatio.Enabled = false;
             this.AspectRatio.FormattingEnabled = true;
             this.AspectRatio.Items.AddRange(new object[] {
             "21:9",
@@ -491,11 +522,11 @@
             this.PlayVideo.UseVisualStyleBackColor = true;
             this.PlayVideo.Click += new System.EventHandler(this.PlayVideo_Click);
             // 
-            // timer1
+            // FileWatch
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 2000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.FileWatch.Enabled = true;
+            this.FileWatch.Interval = 2000;
+            this.FileWatch.Tick += new System.EventHandler(this.FileWatch_Tick);
             // 
             // AddJob
             // 
@@ -528,18 +559,18 @@
             // 
             // RunJobs
             // 
-            this.RunJobs.Location = new System.Drawing.Point(556, 493);
+            this.RunJobs.Location = new System.Drawing.Point(556, 534);
             this.RunJobs.Name = "RunJobs";
-            this.RunJobs.Size = new System.Drawing.Size(228, 79);
+            this.RunJobs.Size = new System.Drawing.Size(228, 38);
             this.RunJobs.TabIndex = 39;
             this.RunJobs.Text = "Run Jobs";
             this.RunJobs.UseVisualStyleBackColor = true;
             this.RunJobs.Click += new System.EventHandler(this.RunJobs_Click);
             // 
-            // timer2
+            // JobsTimer
             // 
-            this.timer2.Interval = 1000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.JobsTimer.Interval = 1500;
+            this.JobsTimer.Tick += new System.EventHandler(this.JobsTimer_Tick);
             // 
             // Batch
             // 
@@ -559,7 +590,7 @@
             this.panel1.Controls.Add(this.LoraButton);
             this.panel1.Controls.Add(this.Loratxt);
             this.panel1.Controls.Add(this.Loralbl);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.Mp4Reslbl);
             this.panel1.Controls.Add(this.VideoRes);
             this.panel1.Controls.Add(this.Batch);
             this.panel1.Controls.Add(this.Schedulerlbl);
@@ -668,15 +699,15 @@
             this.Loralbl.TabIndex = 43;
             this.Loralbl.Text = "Lora:";
             // 
-            // label1
+            // Mp4Reslbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(447, 357);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(84, 13);
-            this.label1.TabIndex = 42;
-            this.label1.Text = "Mp4 Resolution:";
+            this.Mp4Reslbl.AutoSize = true;
+            this.Mp4Reslbl.Location = new System.Drawing.Point(447, 357);
+            this.Mp4Reslbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.Mp4Reslbl.Name = "Mp4Reslbl";
+            this.Mp4Reslbl.Size = new System.Drawing.Size(84, 13);
+            this.Mp4Reslbl.TabIndex = 42;
+            this.Mp4Reslbl.Text = "Mp4 Resolution:";
             // 
             // VideoRes
             // 
@@ -711,16 +742,362 @@
             this.Updates.Text = "Check For Model Updates On Generate";
             this.Updates.UseVisualStyleBackColor = true;
             // 
-            // timer3
+            // CrashChecker
             // 
-            this.timer3.Interval = 5000;
-            this.timer3.Tick += new System.EventHandler(this.timer3_Tick);
+            this.CrashChecker.Interval = 10000;
+            this.CrashChecker.Tick += new System.EventHandler(this.CrashChecker_Tick);
+            // 
+            // GPUPerf
+            // 
+            this.GPUPerf.Interval = 4000;
+            this.GPUPerf.Tick += new System.EventHandler(this.GPUPerf_Tick);
+            // 
+            // discordlbl
+            // 
+            this.discordlbl.AutoSize = true;
+            this.discordlbl.Location = new System.Drawing.Point(555, 486);
+            this.discordlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.discordlbl.Name = "discordlbl";
+            this.discordlbl.Size = new System.Drawing.Size(202, 13);
+            this.discordlbl.TabIndex = 49;
+            this.discordlbl.Text = "Discord webhook: (Posts to discord if set)";
+            // 
+            // discordhook
+            // 
+            this.discordhook.Location = new System.Drawing.Point(556, 504);
+            this.discordhook.Margin = new System.Windows.Forms.Padding(2);
+            this.discordhook.MaxLength = 99999;
+            this.discordhook.Name = "discordhook";
+            this.discordhook.Size = new System.Drawing.Size(228, 20);
+            this.discordhook.TabIndex = 50;
+            // 
+            // Errorlbl
+            // 
+            this.Errorlbl.AutoSize = true;
+            this.Errorlbl.Location = new System.Drawing.Point(828, 12);
+            this.Errorlbl.Name = "Errorlbl";
+            this.Errorlbl.Size = new System.Drawing.Size(29, 13);
+            this.Errorlbl.TabIndex = 51;
+            this.Errorlbl.Text = "Error";
+            this.Errorlbl.Visible = false;
+            // 
+            // MissingSystemlbl
+            // 
+            this.MissingSystemlbl.AutoSize = true;
+            this.MissingSystemlbl.Location = new System.Drawing.Point(828, 25);
+            this.MissingSystemlbl.Name = "MissingSystemlbl";
+            this.MissingSystemlbl.Size = new System.Drawing.Size(436, 13);
+            this.MissingSystemlbl.TabIndex = 52;
+            this.MissingSystemlbl.Text = "Missing system folder and environment.bat file! Is this being ran from a python e" +
+    "nvironment?";
+            this.MissingSystemlbl.Visible = false;
+            // 
+            // MissingRuyilbl
+            // 
+            this.MissingRuyilbl.AutoSize = true;
+            this.MissingRuyilbl.Location = new System.Drawing.Point(828, 38);
+            this.MissingRuyilbl.Name = "MissingRuyilbl";
+            this.MissingRuyilbl.Size = new System.Drawing.Size(253, 13);
+            this.MissingRuyilbl.TabIndex = 53;
+            this.MissingRuyilbl.Text = "Missing Ruyi-Models-main! Clone from Github Repo?";
+            this.MissingRuyilbl.Visible = false;
+            // 
+            // MissingPredictlbl
+            // 
+            this.MissingPredictlbl.AutoSize = true;
+            this.MissingPredictlbl.Location = new System.Drawing.Point(828, 51);
+            this.MissingPredictlbl.Name = "MissingPredictlbl";
+            this.MissingPredictlbl.Size = new System.Drawing.Size(130, 13);
+            this.MissingPredictlbl.TabIndex = 54;
+            this.MissingPredictlbl.Text = "Missing predict_i2v.py file!";
+            this.MissingPredictlbl.Visible = false;
+            // 
+            // FaultLoadinglbl
+            // 
+            this.FaultLoadinglbl.AutoSize = true;
+            this.FaultLoadinglbl.Location = new System.Drawing.Point(828, 64);
+            this.FaultLoadinglbl.Name = "FaultLoadinglbl";
+            this.FaultLoadinglbl.Size = new System.Drawing.Size(121, 13);
+            this.FaultLoadinglbl.TabIndex = 55;
+            this.FaultLoadinglbl.Text = "Fault loading Config.cfg.";
+            this.FaultLoadinglbl.Visible = false;
+            // 
+            // LoadingAilbl
+            // 
+            this.LoadingAilbl.AutoSize = true;
+            this.LoadingAilbl.Location = new System.Drawing.Point(828, 77);
+            this.LoadingAilbl.Name = "LoadingAilbl";
+            this.LoadingAilbl.Size = new System.Drawing.Size(127, 13);
+            this.LoadingAilbl.TabIndex = 56;
+            this.LoadingAilbl.Text = "Loading AI Please Wait...";
+            this.LoadingAilbl.Visible = false;
+            // 
+            // IsRunninglbl
+            // 
+            this.IsRunninglbl.AutoSize = true;
+            this.IsRunninglbl.Location = new System.Drawing.Point(828, 90);
+            this.IsRunninglbl.Name = "IsRunninglbl";
+            this.IsRunninglbl.Size = new System.Drawing.Size(172, 13);
+            this.IsRunninglbl.TabIndex = 57;
+            this.IsRunninglbl.Text = "is running. Do you want to close it?";
+            this.IsRunninglbl.Visible = false;
+            // 
+            // Error1
+            // 
+            this.Error1.AutoSize = true;
+            this.Error1.Location = new System.Drawing.Point(828, 103);
+            this.Error1.Name = "Error1";
+            this.Error1.Size = new System.Drawing.Size(163, 13);
+            this.Error1.TabIndex = 58;
+            this.Error1.Text = "You Must Select A Video Output!";
+            this.Error1.Visible = false;
+            // 
+            // Error2
+            // 
+            this.Error2.AutoSize = true;
+            this.Error2.Location = new System.Drawing.Point(828, 116);
+            this.Error2.Name = "Error2";
+            this.Error2.Size = new System.Drawing.Size(157, 13);
+            this.Error2.TabIndex = 59;
+            this.Error2.Text = "You Must Select A Input Image!";
+            this.Error2.Visible = false;
+            // 
+            // Error3
+            // 
+            this.Error3.AutoSize = true;
+            this.Error3.Location = new System.Drawing.Point(828, 129);
+            this.Error3.Name = "Error3";
+            this.Error3.Size = new System.Drawing.Size(129, 13);
+            this.Error3.TabIndex = 60;
+            this.Error3.Text = "Frame Rate Can\'t Be Null!";
+            this.Error3.Visible = false;
+            // 
+            // Error4
+            // 
+            this.Error4.AutoSize = true;
+            this.Error4.Location = new System.Drawing.Point(828, 142);
+            this.Error4.Name = "Error4";
+            this.Error4.Size = new System.Drawing.Size(135, 13);
+            this.Error4.TabIndex = 61;
+            this.Error4.Text = "Aspect Ratio Can\'t Be Null!";
+            this.Error4.Visible = false;
+            // 
+            // Error5
+            // 
+            this.Error5.AutoSize = true;
+            this.Error5.Location = new System.Drawing.Point(828, 155);
+            this.Error5.Name = "Error5";
+            this.Error5.Size = new System.Drawing.Size(124, 13);
+            this.Error5.TabIndex = 62;
+            this.Error5.Text = "Resolution Can\'t Be Null!";
+            this.Error5.Visible = false;
+            // 
+            // Error6
+            // 
+            this.Error6.AutoSize = true;
+            this.Error6.Location = new System.Drawing.Point(828, 168);
+            this.Error6.Name = "Error6";
+            this.Error6.Size = new System.Drawing.Size(116, 13);
+            this.Error6.TabIndex = 63;
+            this.Error6.Text = "Direction Can\'t Be Null!";
+            this.Error6.Visible = false;
+            // 
+            // Error7
+            // 
+            this.Error7.AutoSize = true;
+            this.Error7.Location = new System.Drawing.Point(828, 181);
+            this.Error7.Name = "Error7";
+            this.Error7.Size = new System.Drawing.Size(106, 13);
+            this.Error7.TabIndex = 64;
+            this.Error7.Text = "Motion Can\'t Be Null!";
+            this.Error7.Visible = false;
+            // 
+            // Error8
+            // 
+            this.Error8.AutoSize = true;
+            this.Error8.Location = new System.Drawing.Point(828, 194);
+            this.Error8.Name = "Error8";
+            this.Error8.Size = new System.Drawing.Size(148, 13);
+            this.Error8.TabIndex = 65;
+            this.Error8.Text = "Mp4 Resolution Can\'t Be Null!";
+            this.Error8.Visible = false;
+            // 
+            // Error9
+            // 
+            this.Error9.AutoSize = true;
+            this.Error9.Location = new System.Drawing.Point(829, 207);
+            this.Error9.Name = "Error9";
+            this.Error9.Size = new System.Drawing.Size(134, 13);
+            this.Error9.TabIndex = 66;
+            this.Error9.Text = "GPU Offload Can\'t Be Null!";
+            this.Error9.Visible = false;
+            // 
+            // Error10
+            // 
+            this.Error10.AutoSize = true;
+            this.Error10.Location = new System.Drawing.Point(829, 220);
+            this.Error10.Name = "Error10";
+            this.Error10.Size = new System.Drawing.Size(101, 13);
+            this.Error10.TabIndex = 67;
+            this.Error10.Text = "Steps Can\'t Be Null!";
+            this.Error10.Visible = false;
+            // 
+            // Error11
+            // 
+            this.Error11.AutoSize = true;
+            this.Error11.Location = new System.Drawing.Point(829, 233);
+            this.Error11.Name = "Error11";
+            this.Error11.Size = new System.Drawing.Size(90, 13);
+            this.Error11.TabIndex = 68;
+            this.Error11.Text = "Cfg Can\'t Be Null!";
+            this.Error11.Visible = false;
+            // 
+            // Error12
+            // 
+            this.Error12.AutoSize = true;
+            this.Error12.Location = new System.Drawing.Point(829, 246);
+            this.Error12.Name = "Error12";
+            this.Error12.Size = new System.Drawing.Size(99, 13);
+            this.Error12.TabIndex = 69;
+            this.Error12.Text = "Seed Can\'t Be Null!";
+            this.Error12.Visible = false;
+            // 
+            // Error13
+            // 
+            this.Error13.AutoSize = true;
+            this.Error13.Location = new System.Drawing.Point(829, 259);
+            this.Error13.Name = "Error13";
+            this.Error13.Size = new System.Drawing.Size(122, 13);
+            this.Error13.TabIndex = 70;
+            this.Error13.Text = "Scheduler Can\'t Be Null!";
+            this.Error13.Visible = false;
+            // 
+            // Error14
+            // 
+            this.Error14.AutoSize = true;
+            this.Error14.Location = new System.Drawing.Point(829, 272);
+            this.Error14.Name = "Error14";
+            this.Error14.Size = new System.Drawing.Size(132, 13);
+            this.Error14.TabIndex = 71;
+            this.Error14.Text = "Lora Weight Can\'t Be Null!";
+            this.Error14.Visible = false;
+            // 
+            // Error15
+            // 
+            this.Error15.AutoSize = true;
+            this.Error15.Location = new System.Drawing.Point(829, 286);
+            this.Error15.Name = "Error15";
+            this.Error15.Size = new System.Drawing.Size(162, 13);
+            this.Error15.TabIndex = 72;
+            this.Error15.Text = "Aspect Ratio Not A Valid Format!";
+            this.Error15.Visible = false;
+            // 
+            // Error16
+            // 
+            this.Error16.AutoSize = true;
+            this.Error16.Location = new System.Drawing.Point(829, 299);
+            this.Error16.Name = "Error16";
+            this.Error16.Size = new System.Drawing.Size(172, 13);
+            this.Error16.TabIndex = 73;
+            this.Error16.Text = "Mp4 Resolution Not A Valid Format";
+            this.Error16.Visible = false;
+            // 
+            // Error17
+            // 
+            this.Error17.AutoSize = true;
+            this.Error17.Location = new System.Drawing.Point(829, 311);
+            this.Error17.Name = "Error17";
+            this.Error17.Size = new System.Drawing.Size(183, 13);
+            this.Error17.TabIndex = 74;
+            this.Error17.Text = "Invalid Video Frames Setting [24-120]";
+            this.Error17.Visible = false;
+            // 
+            // Error18
+            // 
+            this.Error18.AutoSize = true;
+            this.Error18.Location = new System.Drawing.Point(828, 324);
+            this.Error18.Name = "Error18";
+            this.Error18.Size = new System.Drawing.Size(230, 13);
+            this.Error18.TabIndex = 75;
+            this.Error18.Text = "Invalid Generation Resolution Setting [384-896]";
+            this.Error18.Visible = false;
+            // 
+            // Error19
+            // 
+            this.Error19.AutoSize = true;
+            this.Error19.Location = new System.Drawing.Point(829, 339);
+            this.Error19.Name = "Error19";
+            this.Error19.Size = new System.Drawing.Size(236, 13);
+            this.Error19.TabIndex = 76;
+            this.Error19.Text = "Invalid GPU Offload Steps Setting [0, 10, 7, 5, 1]";
+            this.Error19.Visible = false;
+            // 
+            // Error20
+            // 
+            this.Error20.AutoSize = true;
+            this.Error20.Location = new System.Drawing.Point(829, 352);
+            this.Error20.Name = "Error20";
+            this.Error20.Size = new System.Drawing.Size(161, 13);
+            this.Error20.TabIndex = 77;
+            this.Error20.Text = "Invalid Camera Direction Setting!";
+            this.Error20.Visible = false;
+            // 
+            // Error21
+            // 
+            this.Error21.AutoSize = true;
+            this.Error21.Location = new System.Drawing.Point(829, 365);
+            this.Error21.Name = "Error21";
+            this.Error21.Size = new System.Drawing.Size(112, 13);
+            this.Error21.TabIndex = 78;
+            this.Error21.Text = "Invalid Motion Setting!";
+            this.Error21.Visible = false;
+            // 
+            // Error22
+            // 
+            this.Error22.AutoSize = true;
+            this.Error22.Location = new System.Drawing.Point(829, 378);
+            this.Error22.Name = "Error22";
+            this.Error22.Size = new System.Drawing.Size(332, 13);
+            this.Error22.TabIndex = 79;
+            this.Error22.Text = "python.exe is not running. Maybe it crashed, Please check the log.txt";
+            this.Error22.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(552, 577);
+            this.Controls.Add(this.Error22);
+            this.Controls.Add(this.Error21);
+            this.Controls.Add(this.Error20);
+            this.Controls.Add(this.Error19);
+            this.Controls.Add(this.Error18);
+            this.Controls.Add(this.Error17);
+            this.Controls.Add(this.Error16);
+            this.Controls.Add(this.Error15);
+            this.Controls.Add(this.Error14);
+            this.Controls.Add(this.Error13);
+            this.Controls.Add(this.Error12);
+            this.Controls.Add(this.Error11);
+            this.Controls.Add(this.Error10);
+            this.Controls.Add(this.Error9);
+            this.Controls.Add(this.Error8);
+            this.Controls.Add(this.Error7);
+            this.Controls.Add(this.Error6);
+            this.Controls.Add(this.Error5);
+            this.Controls.Add(this.Error4);
+            this.Controls.Add(this.Error3);
+            this.Controls.Add(this.Error2);
+            this.Controls.Add(this.Error1);
+            this.Controls.Add(this.IsRunninglbl);
+            this.Controls.Add(this.LoadingAilbl);
+            this.Controls.Add(this.FaultLoadinglbl);
+            this.Controls.Add(this.MissingPredictlbl);
+            this.Controls.Add(this.MissingRuyilbl);
+            this.Controls.Add(this.MissingSystemlbl);
+            this.Controls.Add(this.Errorlbl);
+            this.Controls.Add(this.discordhook);
+            this.Controls.Add(this.discordlbl);
             this.Controls.Add(this.Updates);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.RunJobs);
@@ -782,24 +1159,56 @@
         private System.Windows.Forms.ComboBox Scheduler;
         private System.Windows.Forms.Button GenerateButton;
         private System.Windows.Forms.Button PlayVideo;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer FileWatch;
         private System.Windows.Forms.Button AddJob;
         private System.Windows.Forms.ListBox JobList;
         private System.Windows.Forms.Button RemoveJob;
         private System.Windows.Forms.Button RunJobs;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer JobsTimer;
         private System.Windows.Forms.Button Batch;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label Mp4Reslbl;
         private System.Windows.Forms.ComboBox VideoRes;
         private System.Windows.Forms.TextBox Weighttxt;
         private System.Windows.Forms.Label Weightlbl;
         private System.Windows.Forms.Button LoraButton;
         private System.Windows.Forms.TextBox Loratxt;
         private System.Windows.Forms.Label Loralbl;
-        private System.Windows.Forms.Timer timer3;
+        private System.Windows.Forms.Timer CrashChecker;
         private System.Windows.Forms.CheckBox Updates;
         private System.Windows.Forms.ComboBox GPUOffload;
+        private System.Windows.Forms.Timer GPUPerf;
+        private System.Windows.Forms.Label discordlbl;
+        private System.Windows.Forms.TextBox discordhook;
+        private System.Windows.Forms.Label Errorlbl;
+        private System.Windows.Forms.Label MissingSystemlbl;
+        private System.Windows.Forms.Label MissingRuyilbl;
+        private System.Windows.Forms.Label MissingPredictlbl;
+        private System.Windows.Forms.Label FaultLoadinglbl;
+        private System.Windows.Forms.Label LoadingAilbl;
+        private System.Windows.Forms.Label IsRunninglbl;
+        private System.Windows.Forms.Label Error1;
+        private System.Windows.Forms.Label Error2;
+        private System.Windows.Forms.Label Error3;
+        private System.Windows.Forms.Label Error4;
+        private System.Windows.Forms.Label Error5;
+        private System.Windows.Forms.Label Error6;
+        private System.Windows.Forms.Label Error7;
+        private System.Windows.Forms.Label Error8;
+        private System.Windows.Forms.Label Error9;
+        private System.Windows.Forms.Label Error10;
+        private System.Windows.Forms.Label Error11;
+        private System.Windows.Forms.Label Error12;
+        private System.Windows.Forms.Label Error13;
+        private System.Windows.Forms.Label Error14;
+        private System.Windows.Forms.Label Error15;
+        private System.Windows.Forms.Label Error16;
+        private System.Windows.Forms.Label Error17;
+        private System.Windows.Forms.Label Error18;
+        private System.Windows.Forms.Label Error19;
+        private System.Windows.Forms.Label Error20;
+        private System.Windows.Forms.Label Error21;
+        private System.Windows.Forms.Label Error22;
     }
 }
 
