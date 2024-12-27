@@ -270,6 +270,7 @@
             // 
             // AspectRatio
             // 
+            this.AspectRatio.Enabled = false;
             this.AspectRatio.FormattingEnabled = true;
             this.AspectRatio.Items.AddRange(new object[] {
             "21:9",
@@ -281,7 +282,6 @@
             "2:3",
             "3:4",
             "4:5",
-            "9:16",
             "9:21"});
             this.AspectRatio.Location = new System.Drawing.Point(93, 372);
             this.AspectRatio.Margin = new System.Windows.Forms.Padding(2);
@@ -388,7 +388,7 @@
             this.Steps.Name = "Steps";
             this.Steps.Size = new System.Drawing.Size(95, 20);
             this.Steps.TabIndex = 27;
-            this.Steps.Text = "25";
+            this.Steps.Text = "20";
             this.Steps.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
             // 
             // Stepslbl

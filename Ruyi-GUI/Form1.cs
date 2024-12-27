@@ -33,6 +33,8 @@ namespace Ruyi_GUI
         public bool DoingJobs = false;
         public bool Not100 = true;
         public DateTime StartTime;
+        public bool SMIInstalled = false;
+        public string GPUInfo;
 
         public Form1()
         {
@@ -70,6 +72,7 @@ namespace Ruyi_GUI
                 GenerateButton.Enabled = false;
                 Batch.Enabled = false;
             }
+            if(File.Exists("nvidia-smi.exe") && NvidiaSMI() != null){SMIInstalled = true;}
         }
 
         private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked; }
@@ -109,6 +112,31 @@ namespace Ruyi_GUI
             else { pictureBox2.BackgroundImage = null; }
         }
 
+        private string[] NvidiaSMI()
+        {
+            string[] parts;
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = "/c nvidia-smi --query-gpu=temperature.gpu,memory.used,utilization.gpu --format=csv,noheader,nounits",
+                RedirectStandardOutput = true, // Capture the output
+                UseShellExecute = false,      // Do not use shell
+                CreateNoWindow = true         // Run without creating a console window
+            };
+
+            using (Process process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+
+                // Read the output from the command
+                string output = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
+                parts = output.TrimEnd('\r', '\n').Replace(" ","").Split(',');
+            }
+            if (parts.Length == 3){return parts;}
+            return null;
+        }
+
         private string GetTimestamp()
         {
             DateTime currentTime = DateTime.UtcNow;
@@ -123,7 +151,7 @@ namespace Ruyi_GUI
                 this.Invoke(new Action<string>(AppendTextBox), new object[] { value });
                 return;
             }
-            this.Text = "Ruyi-GUI " + value;
+            this.Text = "Ruyi-GUI " + value + GPUInfo;
         }
 
         private string AssemblyDirectory()
@@ -145,8 +173,8 @@ namespace Ruyi_GUI
 
         private void LogFiltered(string message)
         {
-            if (string.IsNullOrEmpty(message) || message.Contains("  attn_output = torch.nn.functional.scaled_dot_product_attention(")) { return; }
-            LogMessages.Add(message);
+            if (string.IsNullOrEmpty(message)) { return; }
+            LogMessages.Add(message + GPUInfo);
             if (message.Contains("%") || message.StartsWith("Fetching ")) { AppendTextBox(message); }
             if (message.StartsWith("Fetching ")) { return; }
             if (message.Contains("100%") && Not100) { Not100 = false; return; }
@@ -421,7 +449,16 @@ namespace Ruyi_GUI
                 File.AppendAllLines("log.txt", LogMessages);
                 LogMessages.Clear();
             }
-        }
+          if(SMIInstalled)
+            {
+                string[] Output = NvidiaSMI();
+                if(Output != null)
+                {
+                    GPUInfo = " GPU:" + Output[2] + "% " + Output[0] + "C " + Output[1] + "MB";
+                    this.Text = this.Text.Split(new string[] {" GPU:"}, StringSplitOptions.RemoveEmptyEntries)[0] + GPUInfo;
+                }
+            }
+    }
 
         private bool ValidateInOut()
         {
