@@ -118,7 +118,7 @@ namespace Ruyi_GUI
             }
         }
 
-        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked + "|" + discordhook.Text; }
+        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked + "|" + discordhook.Text + "|" + fp8_quant_mode.Text + "|" + fp8_data_type.Text; }
 
 
         private void SaveSettings() { File.WriteAllText("Config.cfg", SettingsString()); }
@@ -147,6 +147,8 @@ namespace Ruyi_GUI
                 try { Weighttxt.Text = SSettings[16]; } catch { }
                 try { Updates.Checked = bool.Parse(SSettings[17]); } catch { }
                 try { discordhook.Text = SSettings[18]; } catch { }
+                try { fp8_quant_mode.Text = SSettings[19]; } catch { }
+                try { fp8_data_type.Text = SSettings[20]; } catch { }
             }
             catch
             {
@@ -378,6 +380,16 @@ namespace Ruyi_GUI
                     code += @"auto_update = " + Updates.Checked.ToString() + System.Environment.NewLine;
                     continue;
                 }
+                if (line.StartsWith("fp8_quant_mode"))
+                {
+                    code += @"fp8_quant_mode = """ + fp8_quant_mode.Text + @""""+  System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("fp8_data_type"))
+                {
+                    code += @"fp8_data_type = """ + fp8_data_type.Text + @"""" + System.Environment.NewLine;
+                    continue;
+                }
                 code += line + System.Environment.NewLine;
             }
             return code;
@@ -557,6 +569,8 @@ namespace Ruyi_GUI
             if (!GPUOffload.Items.Contains(GPUOffload.Text)) { MessageBox.Show(Error19.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!Direction.Items.Contains(Direction.Text)) { MessageBox.Show(Error20.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!Motion.Items.Contains(Motion.Text)) { MessageBox.Show(Error21.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!fp8_quant_mode.Items.Contains(fp8_quant_mode.Text)) { MessageBox.Show(Error23.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (!fp8_data_type.Items.Contains(fp8_data_type.Text)) { MessageBox.Show(Error24.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             return true;
         }
 

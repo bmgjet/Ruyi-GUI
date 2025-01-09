@@ -114,6 +114,11 @@
             this.Error21 = new System.Windows.Forms.Label();
             this.Error22 = new System.Windows.Forms.Label();
             this.JobList = new System.Windows.Forms.ListBox();
+            this.fp8lbl = new System.Windows.Forms.Label();
+            this.fp8_quant_mode = new System.Windows.Forms.ComboBox();
+            this.fp8_data_type = new System.Windows.Forms.ComboBox();
+            this.Error23 = new System.Windows.Forms.Label();
+            this.Error24 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -406,7 +411,7 @@
             // Samplerlbl
             // 
             this.Samplerlbl.AutoSize = true;
-            this.Samplerlbl.Location = new System.Drawing.Point(3, 447);
+            this.Samplerlbl.Location = new System.Drawing.Point(3, 503);
             this.Samplerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Samplerlbl.Name = "Samplerlbl";
             this.Samplerlbl.Size = new System.Drawing.Size(89, 13);
@@ -415,7 +420,7 @@
             // 
             // Steps
             // 
-            this.Steps.Location = new System.Drawing.Point(11, 480);
+            this.Steps.Location = new System.Drawing.Point(11, 536);
             this.Steps.Margin = new System.Windows.Forms.Padding(2);
             this.Steps.MaxLength = 2;
             this.Steps.Name = "Steps";
@@ -427,7 +432,7 @@
             // Stepslbl
             // 
             this.Stepslbl.AutoSize = true;
-            this.Stepslbl.Location = new System.Drawing.Point(5, 463);
+            this.Stepslbl.Location = new System.Drawing.Point(5, 519);
             this.Stepslbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Stepslbl.Name = "Stepslbl";
             this.Stepslbl.Size = new System.Drawing.Size(37, 13);
@@ -436,7 +441,7 @@
             // 
             // Cfg
             // 
-            this.Cfg.Location = new System.Drawing.Point(113, 480);
+            this.Cfg.Location = new System.Drawing.Point(113, 536);
             this.Cfg.Margin = new System.Windows.Forms.Padding(2);
             this.Cfg.MaxLength = 4;
             this.Cfg.Name = "Cfg";
@@ -448,7 +453,7 @@
             // Cfglbl
             // 
             this.Cfglbl.AutoSize = true;
-            this.Cfglbl.Location = new System.Drawing.Point(110, 463);
+            this.Cfglbl.Location = new System.Drawing.Point(110, 519);
             this.Cfglbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Cfglbl.Name = "Cfglbl";
             this.Cfglbl.Size = new System.Drawing.Size(26, 13);
@@ -457,7 +462,7 @@
             // 
             // Seed
             // 
-            this.Seed.Location = new System.Drawing.Point(215, 480);
+            this.Seed.Location = new System.Drawing.Point(215, 536);
             this.Seed.Margin = new System.Windows.Forms.Padding(2);
             this.Seed.MaxLength = 6;
             this.Seed.Name = "Seed";
@@ -469,7 +474,7 @@
             // Seedlbl
             // 
             this.Seedlbl.AutoSize = true;
-            this.Seedlbl.Location = new System.Drawing.Point(212, 463);
+            this.Seedlbl.Location = new System.Drawing.Point(212, 519);
             this.Seedlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Seedlbl.Name = "Seedlbl";
             this.Seedlbl.Size = new System.Drawing.Size(35, 13);
@@ -479,7 +484,7 @@
             // Schedulerlbl
             // 
             this.Schedulerlbl.AutoSize = true;
-            this.Schedulerlbl.Location = new System.Drawing.Point(315, 463);
+            this.Schedulerlbl.Location = new System.Drawing.Point(315, 519);
             this.Schedulerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Schedulerlbl.Name = "Schedulerlbl";
             this.Schedulerlbl.Size = new System.Drawing.Size(58, 13);
@@ -495,7 +500,7 @@
             "Euler A",
             "DPM++",
             "PNDM"});
-            this.Scheduler.Location = new System.Drawing.Point(318, 480);
+            this.Scheduler.Location = new System.Drawing.Point(318, 536);
             this.Scheduler.Margin = new System.Windows.Forms.Padding(2);
             this.Scheduler.Name = "Scheduler";
             this.Scheduler.Size = new System.Drawing.Size(138, 21);
@@ -504,7 +509,7 @@
             // 
             // GenerateButton
             // 
-            this.GenerateButton.Location = new System.Drawing.Point(6, 513);
+            this.GenerateButton.Location = new System.Drawing.Point(6, 584);
             this.GenerateButton.Margin = new System.Windows.Forms.Padding(2);
             this.GenerateButton.Name = "GenerateButton";
             this.GenerateButton.Size = new System.Drawing.Size(542, 30);
@@ -516,7 +521,7 @@
             // PlayVideo
             // 
             this.PlayVideo.Enabled = false;
-            this.PlayVideo.Location = new System.Drawing.Point(6, 548);
+            this.PlayVideo.Location = new System.Drawing.Point(6, 619);
             this.PlayVideo.Name = "PlayVideo";
             this.PlayVideo.Size = new System.Drawing.Size(324, 24);
             this.PlayVideo.TabIndex = 35;
@@ -567,7 +572,7 @@
             // 
             // Batch
             // 
-            this.Batch.Location = new System.Drawing.Point(465, 480);
+            this.Batch.Location = new System.Drawing.Point(465, 536);
             this.Batch.Name = "Batch";
             this.Batch.Size = new System.Drawing.Size(67, 21);
             this.Batch.TabIndex = 40;
@@ -577,6 +582,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.fp8_data_type);
+            this.panel1.Controls.Add(this.fp8_quant_mode);
+            this.panel1.Controls.Add(this.fp8lbl);
             this.panel1.Controls.Add(this.GPUOffload);
             this.panel1.Controls.Add(this.Weighttxt);
             this.panel1.Controls.Add(this.Weightlbl);
@@ -620,7 +628,7 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(544, 507);
+            this.panel1.Size = new System.Drawing.Size(544, 573);
             this.panel1.TabIndex = 41;
             // 
             // GPUOffload
@@ -728,7 +736,7 @@
             // Updates
             // 
             this.Updates.AutoSize = true;
-            this.Updates.Location = new System.Drawing.Point(336, 553);
+            this.Updates.Location = new System.Drawing.Point(336, 624);
             this.Updates.Name = "Updates";
             this.Updates.Size = new System.Drawing.Size(214, 17);
             this.Updates.TabIndex = 48;
@@ -1064,11 +1072,74 @@
             this.JobList.TabIndex = 80;
             this.JobList.SelectedIndexChanged += new System.EventHandler(this.JobList_SelectedIndexChanged);
             // 
+            // fp8lbl
+            // 
+            this.fp8lbl.AutoSize = true;
+            this.fp8lbl.Location = new System.Drawing.Point(3, 454);
+            this.fp8lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.fp8lbl.Name = "fp8lbl";
+            this.fp8lbl.Size = new System.Drawing.Size(65, 13);
+            this.fp8lbl.TabIndex = 49;
+            this.fp8lbl.Text = "FP8 settings";
+            // 
+            // fp8_quant_mode
+            // 
+            this.fp8_quant_mode.FormattingEnabled = true;
+            this.fp8_quant_mode.Items.AddRange(new object[] {
+            "none",
+            "lite",
+            "strong",
+            "extreme"});
+            this.fp8_quant_mode.Location = new System.Drawing.Point(6, 470);
+            this.fp8_quant_mode.MaxLength = 2;
+            this.fp8_quant_mode.Name = "fp8_quant_mode";
+            this.fp8_quant_mode.Size = new System.Drawing.Size(80, 21);
+            this.fp8_quant_mode.TabIndex = 50;
+            this.fp8_quant_mode.Text = "none";
+            // 
+            // fp8_data_type
+            // 
+            this.fp8_data_type.FormattingEnabled = true;
+            this.fp8_data_type.Items.AddRange(new object[] {
+            "auto",
+            "fp8_e5m2",
+            "fp8_e4m3fn"});
+            this.fp8_data_type.Location = new System.Drawing.Point(103, 470);
+            this.fp8_data_type.MaxLength = 2;
+            this.fp8_data_type.Name = "fp8_data_type";
+            this.fp8_data_type.Size = new System.Drawing.Size(80, 21);
+            this.fp8_data_type.TabIndex = 51;
+            this.fp8_data_type.Text = "auto";
+            // 
+            // Error23
+            // 
+            this.Error23.AutoSize = true;
+            this.Error23.Location = new System.Drawing.Point(829, 391);
+            this.Error23.Name = "Error23";
+            this.Error23.Size = new System.Drawing.Size(687, 13);
+            this.Error23.TabIndex = 81;
+            this.Error23.Text = "Choose [\"none\", \"lite\", \"strong\", \"extreme\"]. GPU memory decreases depending on t" +
+    "he modes: bf16 default > fp8 lite > fp8 strong > fp8 extreme.";
+            this.Error23.Visible = false;
+            // 
+            // Error24
+            // 
+            this.Error24.AutoSize = true;
+            this.Error24.Location = new System.Drawing.Point(829, 404);
+            this.Error24.Name = "Error24";
+            this.Error24.Size = new System.Drawing.Size(629, 13);
+            this.Error24.TabIndex = 82;
+            this.Error24.Text = "Choose [\"auto\", \"fp8_e5m2\", \"fp8_e4m3fn\"]. The \"extreme\" mode with \"fp8_e5m2\" is " +
+    "not recommended for achieving good quality.";
+            this.Error24.Visible = false;
+            // 
             // GUIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(552, 580);
+            this.ClientSize = new System.Drawing.Size(552, 645);
+            this.Controls.Add(this.Error24);
+            this.Controls.Add(this.Error23);
             this.Controls.Add(this.JobList);
             this.Controls.Add(this.Error22);
             this.Controls.Add(this.Error21);
@@ -1211,6 +1282,11 @@
         private System.Windows.Forms.Label Error21;
         private System.Windows.Forms.Label Error22;
         private System.Windows.Forms.ListBox JobList;
+        private System.Windows.Forms.ComboBox fp8_data_type;
+        private System.Windows.Forms.ComboBox fp8_quant_mode;
+        private System.Windows.Forms.Label fp8lbl;
+        private System.Windows.Forms.Label Error23;
+        private System.Windows.Forms.Label Error24;
     }
 }
 
