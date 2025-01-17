@@ -71,6 +71,9 @@
             this.JobsTimer = new System.Windows.Forms.Timer(this.components);
             this.Batch = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.fp8_data_type = new System.Windows.Forms.ComboBox();
+            this.fp8_quant_mode = new System.Windows.Forms.ComboBox();
+            this.fp8lbl = new System.Windows.Forms.Label();
             this.GPUOffload = new System.Windows.Forms.ComboBox();
             this.Weighttxt = new System.Windows.Forms.TextBox();
             this.Weightlbl = new System.Windows.Forms.Label();
@@ -114,11 +117,36 @@
             this.Error21 = new System.Windows.Forms.Label();
             this.Error22 = new System.Windows.Forms.Label();
             this.JobList = new System.Windows.Forms.ListBox();
-            this.fp8lbl = new System.Windows.Forms.Label();
-            this.fp8_quant_mode = new System.Windows.Forms.ComboBox();
-            this.fp8_data_type = new System.Windows.Forms.ComboBox();
             this.Error23 = new System.Windows.Forms.Label();
             this.Error24 = new System.Windows.Forms.Label();
+            this.teacachelbl = new System.Windows.Forms.Label();
+            this.teacachethreshold = new System.Windows.Forms.TextBox();
+            this.teacachestart = new System.Windows.Forms.TextBox();
+            this.teacacheend = new System.Windows.Forms.TextBox();
+            this.teacachecpu = new System.Windows.Forms.CheckBox();
+            this.enhancevideolbl = new System.Windows.Forms.Label();
+            this.enhancevideoenable = new System.Windows.Forms.CheckBox();
+            this.enhancevideoweight = new System.Windows.Forms.TextBox();
+            this.enhancevideostart = new System.Windows.Forms.TextBox();
+            this.enhancevideoend = new System.Windows.Forms.TextBox();
+            this.teacacheenable = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.teacacheenabletxt = new System.Windows.Forms.Label();
+            this.teacachethresholdtxt = new System.Windows.Forms.Label();
+            this.teacachecputxt = new System.Windows.Forms.Label();
+            this.teacachestarttxt = new System.Windows.Forms.Label();
+            this.teacacheendtxt = new System.Windows.Forms.Label();
+            this.enhancevideoenabletxt = new System.Windows.Forms.Label();
+            this.enhancevideoweighttxt = new System.Windows.Forms.Label();
+            this.enhancevideostarttxt = new System.Windows.Forms.Label();
+            this.enhancevideoendtxt = new System.Windows.Forms.Label();
+            this.Stepstxt = new System.Windows.Forms.Label();
+            this.Error25 = new System.Windows.Forms.Label();
+            this.Error26 = new System.Windows.Forms.Label();
+            this.Error27 = new System.Windows.Forms.Label();
+            this.Error28 = new System.Windows.Forms.Label();
+            this.Error29 = new System.Windows.Forms.Label();
+            this.Error30 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
@@ -390,7 +418,7 @@
             // LowMemoryMode
             // 
             this.LowMemoryMode.AutoSize = true;
-            this.LowMemoryMode.Location = new System.Drawing.Point(91, 424);
+            this.LowMemoryMode.Location = new System.Drawing.Point(93, 424);
             this.LowMemoryMode.Margin = new System.Windows.Forms.Padding(2);
             this.LowMemoryMode.Name = "LowMemoryMode";
             this.LowMemoryMode.Size = new System.Drawing.Size(142, 17);
@@ -411,7 +439,7 @@
             // Samplerlbl
             // 
             this.Samplerlbl.AutoSize = true;
-            this.Samplerlbl.Location = new System.Drawing.Point(3, 503);
+            this.Samplerlbl.Location = new System.Drawing.Point(3, 520);
             this.Samplerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Samplerlbl.Name = "Samplerlbl";
             this.Samplerlbl.Size = new System.Drawing.Size(89, 13);
@@ -420,7 +448,7 @@
             // 
             // Steps
             // 
-            this.Steps.Location = new System.Drawing.Point(11, 536);
+            this.Steps.Location = new System.Drawing.Point(11, 558);
             this.Steps.Margin = new System.Windows.Forms.Padding(2);
             this.Steps.MaxLength = 2;
             this.Steps.Name = "Steps";
@@ -432,7 +460,7 @@
             // Stepslbl
             // 
             this.Stepslbl.AutoSize = true;
-            this.Stepslbl.Location = new System.Drawing.Point(5, 519);
+            this.Stepslbl.Location = new System.Drawing.Point(5, 541);
             this.Stepslbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Stepslbl.Name = "Stepslbl";
             this.Stepslbl.Size = new System.Drawing.Size(37, 13);
@@ -441,7 +469,7 @@
             // 
             // Cfg
             // 
-            this.Cfg.Location = new System.Drawing.Point(113, 536);
+            this.Cfg.Location = new System.Drawing.Point(113, 558);
             this.Cfg.Margin = new System.Windows.Forms.Padding(2);
             this.Cfg.MaxLength = 4;
             this.Cfg.Name = "Cfg";
@@ -453,7 +481,7 @@
             // Cfglbl
             // 
             this.Cfglbl.AutoSize = true;
-            this.Cfglbl.Location = new System.Drawing.Point(110, 519);
+            this.Cfglbl.Location = new System.Drawing.Point(110, 541);
             this.Cfglbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Cfglbl.Name = "Cfglbl";
             this.Cfglbl.Size = new System.Drawing.Size(26, 13);
@@ -462,7 +490,7 @@
             // 
             // Seed
             // 
-            this.Seed.Location = new System.Drawing.Point(215, 536);
+            this.Seed.Location = new System.Drawing.Point(215, 558);
             this.Seed.Margin = new System.Windows.Forms.Padding(2);
             this.Seed.MaxLength = 6;
             this.Seed.Name = "Seed";
@@ -474,7 +502,7 @@
             // Seedlbl
             // 
             this.Seedlbl.AutoSize = true;
-            this.Seedlbl.Location = new System.Drawing.Point(212, 519);
+            this.Seedlbl.Location = new System.Drawing.Point(212, 541);
             this.Seedlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Seedlbl.Name = "Seedlbl";
             this.Seedlbl.Size = new System.Drawing.Size(35, 13);
@@ -484,7 +512,7 @@
             // Schedulerlbl
             // 
             this.Schedulerlbl.AutoSize = true;
-            this.Schedulerlbl.Location = new System.Drawing.Point(315, 519);
+            this.Schedulerlbl.Location = new System.Drawing.Point(315, 541);
             this.Schedulerlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Schedulerlbl.Name = "Schedulerlbl";
             this.Schedulerlbl.Size = new System.Drawing.Size(58, 13);
@@ -500,7 +528,7 @@
             "Euler A",
             "DPM++",
             "PNDM"});
-            this.Scheduler.Location = new System.Drawing.Point(318, 536);
+            this.Scheduler.Location = new System.Drawing.Point(318, 558);
             this.Scheduler.Margin = new System.Windows.Forms.Padding(2);
             this.Scheduler.Name = "Scheduler";
             this.Scheduler.Size = new System.Drawing.Size(138, 21);
@@ -509,7 +537,7 @@
             // 
             // GenerateButton
             // 
-            this.GenerateButton.Location = new System.Drawing.Point(6, 584);
+            this.GenerateButton.Location = new System.Drawing.Point(6, 596);
             this.GenerateButton.Margin = new System.Windows.Forms.Padding(2);
             this.GenerateButton.Name = "GenerateButton";
             this.GenerateButton.Size = new System.Drawing.Size(542, 30);
@@ -521,7 +549,7 @@
             // PlayVideo
             // 
             this.PlayVideo.Enabled = false;
-            this.PlayVideo.Location = new System.Drawing.Point(6, 619);
+            this.PlayVideo.Location = new System.Drawing.Point(6, 631);
             this.PlayVideo.Name = "PlayVideo";
             this.PlayVideo.Size = new System.Drawing.Size(324, 24);
             this.PlayVideo.TabIndex = 35;
@@ -537,7 +565,7 @@
             // 
             // AddJob
             // 
-            this.AddJob.Location = new System.Drawing.Point(556, 456);
+            this.AddJob.Location = new System.Drawing.Point(558, 510);
             this.AddJob.Name = "AddJob";
             this.AddJob.Size = new System.Drawing.Size(101, 26);
             this.AddJob.TabIndex = 36;
@@ -547,7 +575,7 @@
             // 
             // RemoveJob
             // 
-            this.RemoveJob.Location = new System.Drawing.Point(683, 456);
+            this.RemoveJob.Location = new System.Drawing.Point(685, 510);
             this.RemoveJob.Name = "RemoveJob";
             this.RemoveJob.Size = new System.Drawing.Size(101, 26);
             this.RemoveJob.TabIndex = 38;
@@ -557,7 +585,7 @@
             // 
             // RunJobs
             // 
-            this.RunJobs.Location = new System.Drawing.Point(556, 534);
+            this.RunJobs.Location = new System.Drawing.Point(558, 588);
             this.RunJobs.Name = "RunJobs";
             this.RunJobs.Size = new System.Drawing.Size(228, 38);
             this.RunJobs.TabIndex = 39;
@@ -572,7 +600,7 @@
             // 
             // Batch
             // 
-            this.Batch.Location = new System.Drawing.Point(465, 536);
+            this.Batch.Location = new System.Drawing.Point(465, 558);
             this.Batch.Name = "Batch";
             this.Batch.Size = new System.Drawing.Size(67, 21);
             this.Batch.TabIndex = 40;
@@ -582,6 +610,17 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.teacacheenable);
+            this.panel1.Controls.Add(this.enhancevideoend);
+            this.panel1.Controls.Add(this.enhancevideostart);
+            this.panel1.Controls.Add(this.enhancevideoweight);
+            this.panel1.Controls.Add(this.enhancevideoenable);
+            this.panel1.Controls.Add(this.enhancevideolbl);
+            this.panel1.Controls.Add(this.teacachecpu);
+            this.panel1.Controls.Add(this.teacacheend);
+            this.panel1.Controls.Add(this.teacachestart);
+            this.panel1.Controls.Add(this.teacachethreshold);
+            this.panel1.Controls.Add(this.teacachelbl);
             this.panel1.Controls.Add(this.fp8_data_type);
             this.panel1.Controls.Add(this.fp8_quant_mode);
             this.panel1.Controls.Add(this.fp8lbl);
@@ -628,8 +667,47 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(544, 573);
+            this.panel1.Size = new System.Drawing.Size(544, 585);
             this.panel1.TabIndex = 41;
+            // 
+            // fp8_data_type
+            // 
+            this.fp8_data_type.FormattingEnabled = true;
+            this.fp8_data_type.Items.AddRange(new object[] {
+            "auto",
+            "fp8_e5m2",
+            "fp8_e4m3fn"});
+            this.fp8_data_type.Location = new System.Drawing.Point(103, 470);
+            this.fp8_data_type.MaxLength = 2;
+            this.fp8_data_type.Name = "fp8_data_type";
+            this.fp8_data_type.Size = new System.Drawing.Size(80, 21);
+            this.fp8_data_type.TabIndex = 51;
+            this.fp8_data_type.Text = "auto";
+            // 
+            // fp8_quant_mode
+            // 
+            this.fp8_quant_mode.FormattingEnabled = true;
+            this.fp8_quant_mode.Items.AddRange(new object[] {
+            "none",
+            "lite",
+            "strong",
+            "extreme"});
+            this.fp8_quant_mode.Location = new System.Drawing.Point(6, 470);
+            this.fp8_quant_mode.MaxLength = 2;
+            this.fp8_quant_mode.Name = "fp8_quant_mode";
+            this.fp8_quant_mode.Size = new System.Drawing.Size(80, 21);
+            this.fp8_quant_mode.TabIndex = 50;
+            this.fp8_quant_mode.Text = "none";
+            // 
+            // fp8lbl
+            // 
+            this.fp8lbl.AutoSize = true;
+            this.fp8lbl.Location = new System.Drawing.Point(3, 454);
+            this.fp8lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.fp8lbl.Name = "fp8lbl";
+            this.fp8lbl.Size = new System.Drawing.Size(65, 13);
+            this.fp8lbl.TabIndex = 49;
+            this.fp8lbl.Text = "FP8 settings";
             // 
             // GPUOffload
             // 
@@ -736,7 +814,7 @@
             // Updates
             // 
             this.Updates.AutoSize = true;
-            this.Updates.Location = new System.Drawing.Point(336, 624);
+            this.Updates.Location = new System.Drawing.Point(336, 636);
             this.Updates.Name = "Updates";
             this.Updates.Size = new System.Drawing.Size(214, 17);
             this.Updates.TabIndex = 48;
@@ -756,7 +834,7 @@
             // discordlbl
             // 
             this.discordlbl.AutoSize = true;
-            this.discordlbl.Location = new System.Drawing.Point(555, 486);
+            this.discordlbl.Location = new System.Drawing.Point(557, 540);
             this.discordlbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.discordlbl.Name = "discordlbl";
             this.discordlbl.Size = new System.Drawing.Size(202, 13);
@@ -765,7 +843,7 @@
             // 
             // discordhook
             // 
-            this.discordhook.Location = new System.Drawing.Point(556, 504);
+            this.discordhook.Location = new System.Drawing.Point(558, 558);
             this.discordhook.Margin = new System.Windows.Forms.Padding(2);
             this.discordhook.MaxLength = 99999;
             this.discordhook.Name = "discordhook";
@@ -1068,48 +1146,9 @@
             this.JobList.FormattingEnabled = true;
             this.JobList.Location = new System.Drawing.Point(558, 8);
             this.JobList.Name = "JobList";
-            this.JobList.Size = new System.Drawing.Size(225, 446);
+            this.JobList.Size = new System.Drawing.Size(225, 498);
             this.JobList.TabIndex = 80;
             this.JobList.SelectedIndexChanged += new System.EventHandler(this.JobList_SelectedIndexChanged);
-            // 
-            // fp8lbl
-            // 
-            this.fp8lbl.AutoSize = true;
-            this.fp8lbl.Location = new System.Drawing.Point(3, 454);
-            this.fp8lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.fp8lbl.Name = "fp8lbl";
-            this.fp8lbl.Size = new System.Drawing.Size(65, 13);
-            this.fp8lbl.TabIndex = 49;
-            this.fp8lbl.Text = "FP8 settings";
-            // 
-            // fp8_quant_mode
-            // 
-            this.fp8_quant_mode.FormattingEnabled = true;
-            this.fp8_quant_mode.Items.AddRange(new object[] {
-            "none",
-            "lite",
-            "strong",
-            "extreme"});
-            this.fp8_quant_mode.Location = new System.Drawing.Point(6, 470);
-            this.fp8_quant_mode.MaxLength = 2;
-            this.fp8_quant_mode.Name = "fp8_quant_mode";
-            this.fp8_quant_mode.Size = new System.Drawing.Size(80, 21);
-            this.fp8_quant_mode.TabIndex = 50;
-            this.fp8_quant_mode.Text = "none";
-            // 
-            // fp8_data_type
-            // 
-            this.fp8_data_type.FormattingEnabled = true;
-            this.fp8_data_type.Items.AddRange(new object[] {
-            "auto",
-            "fp8_e5m2",
-            "fp8_e4m3fn"});
-            this.fp8_data_type.Location = new System.Drawing.Point(103, 470);
-            this.fp8_data_type.MaxLength = 2;
-            this.fp8_data_type.Name = "fp8_data_type";
-            this.fp8_data_type.Size = new System.Drawing.Size(80, 21);
-            this.fp8_data_type.TabIndex = 51;
-            this.fp8_data_type.Text = "auto";
             // 
             // Error23
             // 
@@ -1133,11 +1172,309 @@
     "not recommended for achieving good quality.";
             this.Error24.Visible = false;
             // 
+            // teacachelbl
+            // 
+            this.teacachelbl.AutoSize = true;
+            this.teacachelbl.Location = new System.Drawing.Point(222, 454);
+            this.teacachelbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.teacachelbl.Name = "teacachelbl";
+            this.teacachelbl.Size = new System.Drawing.Size(63, 13);
+            this.teacachelbl.TabIndex = 52;
+            this.teacachelbl.Text = "Tea Cache:";
+            // 
+            // teacachethreshold
+            // 
+            this.teacachethreshold.Location = new System.Drawing.Point(377, 470);
+            this.teacachethreshold.Margin = new System.Windows.Forms.Padding(2);
+            this.teacachethreshold.MaxLength = 4;
+            this.teacachethreshold.Name = "teacachethreshold";
+            this.teacachethreshold.Size = new System.Drawing.Size(46, 20);
+            this.teacachethreshold.TabIndex = 53;
+            this.teacachethreshold.Text = "0.10";
+            this.teacachethreshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cfg_KeyPress);
+            // 
+            // teacachestart
+            // 
+            this.teacachestart.Location = new System.Drawing.Point(427, 470);
+            this.teacachestart.Margin = new System.Windows.Forms.Padding(2);
+            this.teacachestart.MaxLength = 3;
+            this.teacachestart.Name = "teacachestart";
+            this.teacachestart.Size = new System.Drawing.Size(48, 20);
+            this.teacachestart.TabIndex = 54;
+            this.teacachestart.Text = "3";
+            this.teacachestart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
+            // 
+            // teacacheend
+            // 
+            this.teacacheend.Location = new System.Drawing.Point(479, 470);
+            this.teacacheend.Margin = new System.Windows.Forms.Padding(2);
+            this.teacacheend.MaxLength = 3;
+            this.teacacheend.Name = "teacacheend";
+            this.teacacheend.Size = new System.Drawing.Size(44, 20);
+            this.teacacheend.TabIndex = 55;
+            this.teacacheend.Text = "1";
+            this.teacacheend.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
+            // 
+            // teacachecpu
+            // 
+            this.teacachecpu.AutoSize = true;
+            this.teacachecpu.Location = new System.Drawing.Point(288, 472);
+            this.teacachecpu.Margin = new System.Windows.Forms.Padding(2);
+            this.teacachecpu.Name = "teacachecpu";
+            this.teacachecpu.Size = new System.Drawing.Size(85, 17);
+            this.teacachecpu.TabIndex = 56;
+            this.teacachecpu.Text = "CPU Offload";
+            this.teacachecpu.UseVisualStyleBackColor = true;
+            // 
+            // enhancevideolbl
+            // 
+            this.enhancevideolbl.AutoSize = true;
+            this.enhancevideolbl.Location = new System.Drawing.Point(222, 495);
+            this.enhancevideolbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.enhancevideolbl.Name = "enhancevideolbl";
+            this.enhancevideolbl.Size = new System.Drawing.Size(93, 13);
+            this.enhancevideolbl.TabIndex = 57;
+            this.enhancevideolbl.Text = "Enhance-A-Video:";
+            // 
+            // enhancevideoenable
+            // 
+            this.enhancevideoenable.AutoSize = true;
+            this.enhancevideoenable.Location = new System.Drawing.Point(225, 514);
+            this.enhancevideoenable.Margin = new System.Windows.Forms.Padding(2);
+            this.enhancevideoenable.Name = "enhancevideoenable";
+            this.enhancevideoenable.Size = new System.Drawing.Size(59, 17);
+            this.enhancevideoenable.TabIndex = 58;
+            this.enhancevideoenable.Text = "Enable";
+            this.enhancevideoenable.UseVisualStyleBackColor = true;
+            // 
+            // enhancevideoweight
+            // 
+            this.enhancevideoweight.Location = new System.Drawing.Point(288, 514);
+            this.enhancevideoweight.Margin = new System.Windows.Forms.Padding(2);
+            this.enhancevideoweight.MaxLength = 4;
+            this.enhancevideoweight.Name = "enhancevideoweight";
+            this.enhancevideoweight.Size = new System.Drawing.Size(46, 20);
+            this.enhancevideoweight.TabIndex = 59;
+            this.enhancevideoweight.Text = "1.0";
+            this.enhancevideoweight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Cfg_KeyPress);
+            // 
+            // enhancevideostart
+            // 
+            this.enhancevideostart.Location = new System.Drawing.Point(338, 514);
+            this.enhancevideostart.Margin = new System.Windows.Forms.Padding(2);
+            this.enhancevideostart.MaxLength = 3;
+            this.enhancevideostart.Name = "enhancevideostart";
+            this.enhancevideostart.Size = new System.Drawing.Size(46, 20);
+            this.enhancevideostart.TabIndex = 60;
+            this.enhancevideostart.Text = "0";
+            this.enhancevideostart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
+            // 
+            // enhancevideoend
+            // 
+            this.enhancevideoend.Location = new System.Drawing.Point(388, 514);
+            this.enhancevideoend.Margin = new System.Windows.Forms.Padding(2);
+            this.enhancevideoend.MaxLength = 3;
+            this.enhancevideoend.Name = "enhancevideoend";
+            this.enhancevideoend.Size = new System.Drawing.Size(46, 20);
+            this.enhancevideoend.TabIndex = 61;
+            this.enhancevideoend.Text = "0";
+            this.enhancevideoend.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly);
+            // 
+            // teacacheenable
+            // 
+            this.teacacheenable.AutoSize = true;
+            this.teacacheenable.Location = new System.Drawing.Point(226, 472);
+            this.teacacheenable.Margin = new System.Windows.Forms.Padding(2);
+            this.teacacheenable.Name = "teacacheenable";
+            this.teacacheenable.Size = new System.Drawing.Size(59, 17);
+            this.teacacheenable.TabIndex = 62;
+            this.teacacheenable.Text = "Enable";
+            this.teacacheenable.UseVisualStyleBackColor = true;
+            // 
+            // teacacheenabletxt
+            // 
+            this.teacacheenabletxt.AutoSize = true;
+            this.teacacheenabletxt.Location = new System.Drawing.Point(829, 417);
+            this.teacacheenabletxt.Name = "teacacheenabletxt";
+            this.teacacheenabletxt.Size = new System.Drawing.Size(280, 13);
+            this.teacacheenabletxt.TabIndex = 83;
+            this.teacacheenabletxt.Text = "Enable TeaCache, Can Improve Speed And Memory Use.";
+            this.teacacheenabletxt.Visible = false;
+            // 
+            // teacachethresholdtxt
+            // 
+            this.teacachethresholdtxt.AutoSize = true;
+            this.teacachethresholdtxt.Location = new System.Drawing.Point(829, 430);
+            this.teacachethresholdtxt.Name = "teacachethresholdtxt";
+            this.teacachethresholdtxt.Size = new System.Drawing.Size(589, 13);
+            this.teacachethresholdtxt.TabIndex = 84;
+            this.teacachethresholdtxt.Text = "Threshold - A smaller threshold results in fewer cached steps. 0.10 caches 6 ~ 8 " +
+    "steps, 0.15 caches 10 ~ 12 steps normally.";
+            this.teacachethresholdtxt.Visible = false;
+            // 
+            // teacachecputxt
+            // 
+            this.teacachecputxt.AutoSize = true;
+            this.teacachecputxt.Location = new System.Drawing.Point(829, 443);
+            this.teacachecputxt.Name = "teacachecputxt";
+            this.teacachecputxt.Size = new System.Drawing.Size(346, 13);
+            this.teacachecputxt.TabIndex = 85;
+            this.teacachecputxt.Text = "Offload TeaCache tensors to cpu, which could save some GPU memory";
+            this.teacachecputxt.Visible = false;
+            // 
+            // teacachestarttxt
+            // 
+            this.teacachestarttxt.AutoSize = true;
+            this.teacachestarttxt.Location = new System.Drawing.Point(828, 456);
+            this.teacachestarttxt.Name = "teacachestarttxt";
+            this.teacachestarttxt.Size = new System.Drawing.Size(245, 13);
+            this.teacachestarttxt.TabIndex = 86;
+            this.teacachestarttxt.Text = "First n steps do not use TeaCache, should be >= 1";
+            this.teacachestarttxt.Visible = false;
+            // 
+            // teacacheendtxt
+            // 
+            this.teacacheendtxt.AutoSize = true;
+            this.teacacheendtxt.Location = new System.Drawing.Point(829, 469);
+            this.teacacheendtxt.Name = "teacacheendtxt";
+            this.teacacheendtxt.Size = new System.Drawing.Size(246, 13);
+            this.teacacheendtxt.TabIndex = 87;
+            this.teacacheendtxt.Text = "Last n steps do not use TeaCache, should be >= 1";
+            this.teacacheendtxt.Visible = false;
+            // 
+            // enhancevideoenabletxt
+            // 
+            this.enhancevideoenabletxt.AutoSize = true;
+            this.enhancevideoenabletxt.Location = new System.Drawing.Point(829, 482);
+            this.enhancevideoenabletxt.Name = "enhancevideoenabletxt";
+            this.enhancevideoenabletxt.Size = new System.Drawing.Size(126, 13);
+            this.enhancevideoenabletxt.TabIndex = 88;
+            this.enhancevideoenabletxt.Text = "Enable Enhance-A-Video";
+            this.enhancevideoenabletxt.Visible = false;
+            // 
+            // enhancevideoweighttxt
+            // 
+            this.enhancevideoweighttxt.AutoSize = true;
+            this.enhancevideoweighttxt.Location = new System.Drawing.Point(829, 495);
+            this.enhancevideoweighttxt.Name = "enhancevideoweighttxt";
+            this.enhancevideoweighttxt.Size = new System.Drawing.Size(509, 13);
+            this.enhancevideoweighttxt.TabIndex = 89;
+            this.enhancevideoweighttxt.Text = "Weight - Should be smaller than 10. For smaller video length and lower resolution" +
+    ", should be smaller than 5.";
+            this.enhancevideoweighttxt.Visible = false;
+            // 
+            // enhancevideostarttxt
+            // 
+            this.enhancevideostarttxt.AutoSize = true;
+            this.enhancevideostarttxt.Location = new System.Drawing.Point(829, 507);
+            this.enhancevideostarttxt.Name = "enhancevideostarttxt";
+            this.enhancevideostarttxt.Size = new System.Drawing.Size(278, 13);
+            this.enhancevideostarttxt.TabIndex = 90;
+            this.enhancevideostarttxt.Text = "First n steps do not use Enhance-A-Video, should be >= 0";
+            this.enhancevideostarttxt.Visible = false;
+            // 
+            // enhancevideoendtxt
+            // 
+            this.enhancevideoendtxt.AutoSize = true;
+            this.enhancevideoendtxt.Location = new System.Drawing.Point(829, 520);
+            this.enhancevideoendtxt.Name = "enhancevideoendtxt";
+            this.enhancevideoendtxt.Size = new System.Drawing.Size(279, 13);
+            this.enhancevideoendtxt.TabIndex = 91;
+            this.enhancevideoendtxt.Text = "Last n steps do not use Enhance-A-Video, should be >= 0";
+            this.enhancevideoendtxt.Visible = false;
+            // 
+            // Stepstxt
+            // 
+            this.Stepstxt.AutoSize = true;
+            this.Stepstxt.Location = new System.Drawing.Point(828, 534);
+            this.Stepstxt.Name = "Stepstxt";
+            this.Stepstxt.Size = new System.Drawing.Size(463, 13);
+            this.Stepstxt.TabIndex = 93;
+            this.Stepstxt.Text = "How Many Steps To Run Over The Video [18-25] Normal Range. Less = faster but wors" +
+    "e quality.";
+            this.Stepstxt.Visible = false;
+            // 
+            // Error25
+            // 
+            this.Error25.AutoSize = true;
+            this.Error25.Location = new System.Drawing.Point(829, 547);
+            this.Error25.Name = "Error25";
+            this.Error25.Size = new System.Drawing.Size(174, 13);
+            this.Error25.TabIndex = 94;
+            this.Error25.Text = "Tea Cache Threshold Can\'t Be Null";
+            this.Error25.Visible = false;
+            // 
+            // Error26
+            // 
+            this.Error26.AutoSize = true;
+            this.Error26.Location = new System.Drawing.Point(829, 560);
+            this.Error26.Name = "Error26";
+            this.Error26.Size = new System.Drawing.Size(149, 13);
+            this.Error26.TabIndex = 95;
+            this.Error26.Text = "Tea Cache Start Can\'t Be Null";
+            this.Error26.Visible = false;
+            // 
+            // Error27
+            // 
+            this.Error27.AutoSize = true;
+            this.Error27.Location = new System.Drawing.Point(829, 571);
+            this.Error27.Name = "Error27";
+            this.Error27.Size = new System.Drawing.Size(146, 13);
+            this.Error27.TabIndex = 96;
+            this.Error27.Text = "Tea Cache End Can\'t Be Null";
+            this.Error27.Visible = false;
+            // 
+            // Error28
+            // 
+            this.Error28.AutoSize = true;
+            this.Error28.Location = new System.Drawing.Point(829, 584);
+            this.Error28.Name = "Error28";
+            this.Error28.Size = new System.Drawing.Size(191, 13);
+            this.Error28.TabIndex = 97;
+            this.Error28.Text = "Enhance A Video Weight Can\'t Be Null";
+            this.Error28.Visible = false;
+            // 
+            // Error29
+            // 
+            this.Error29.AutoSize = true;
+            this.Error29.Location = new System.Drawing.Point(829, 596);
+            this.Error29.Name = "Error29";
+            this.Error29.Size = new System.Drawing.Size(179, 13);
+            this.Error29.TabIndex = 98;
+            this.Error29.Text = "Enhance A Video Start Can\'t Be Null";
+            this.Error29.Visible = false;
+            // 
+            // Error30
+            // 
+            this.Error30.AutoSize = true;
+            this.Error30.Location = new System.Drawing.Point(829, 609);
+            this.Error30.Name = "Error30";
+            this.Error30.Size = new System.Drawing.Size(176, 13);
+            this.Error30.TabIndex = 99;
+            this.Error30.Text = "Enhance A Video End Can\'t Be Null";
+            this.Error30.Visible = false;
+            // 
             // GUIForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(552, 645);
+            this.ClientSize = new System.Drawing.Size(552, 657);
+            this.Controls.Add(this.Error30);
+            this.Controls.Add(this.Error29);
+            this.Controls.Add(this.Error28);
+            this.Controls.Add(this.Error27);
+            this.Controls.Add(this.Error26);
+            this.Controls.Add(this.Error25);
+            this.Controls.Add(this.Stepstxt);
+            this.Controls.Add(this.enhancevideoendtxt);
+            this.Controls.Add(this.enhancevideostarttxt);
+            this.Controls.Add(this.enhancevideoweighttxt);
+            this.Controls.Add(this.enhancevideoenabletxt);
+            this.Controls.Add(this.teacacheendtxt);
+            this.Controls.Add(this.teacachestarttxt);
+            this.Controls.Add(this.teacachecputxt);
+            this.Controls.Add(this.teacachethresholdtxt);
+            this.Controls.Add(this.teacacheenabletxt);
             this.Controls.Add(this.Error24);
             this.Controls.Add(this.Error23);
             this.Controls.Add(this.JobList);
@@ -1287,6 +1624,34 @@
         private System.Windows.Forms.Label fp8lbl;
         private System.Windows.Forms.Label Error23;
         private System.Windows.Forms.Label Error24;
+        private System.Windows.Forms.CheckBox teacachecpu;
+        private System.Windows.Forms.TextBox teacacheend;
+        private System.Windows.Forms.TextBox teacachestart;
+        private System.Windows.Forms.TextBox teacachethreshold;
+        private System.Windows.Forms.Label teacachelbl;
+        private System.Windows.Forms.CheckBox teacacheenable;
+        private System.Windows.Forms.TextBox enhancevideoend;
+        private System.Windows.Forms.TextBox enhancevideostart;
+        private System.Windows.Forms.TextBox enhancevideoweight;
+        private System.Windows.Forms.CheckBox enhancevideoenable;
+        private System.Windows.Forms.Label enhancevideolbl;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label teacacheenabletxt;
+        private System.Windows.Forms.Label teacachethresholdtxt;
+        private System.Windows.Forms.Label teacachecputxt;
+        private System.Windows.Forms.Label teacachestarttxt;
+        private System.Windows.Forms.Label teacacheendtxt;
+        private System.Windows.Forms.Label enhancevideoenabletxt;
+        private System.Windows.Forms.Label enhancevideoweighttxt;
+        private System.Windows.Forms.Label enhancevideostarttxt;
+        private System.Windows.Forms.Label enhancevideoendtxt;
+        private System.Windows.Forms.Label Stepstxt;
+        private System.Windows.Forms.Label Error25;
+        private System.Windows.Forms.Label Error26;
+        private System.Windows.Forms.Label Error27;
+        private System.Windows.Forms.Label Error28;
+        private System.Windows.Forms.Label Error29;
+        private System.Windows.Forms.Label Error30;
     }
 }
 

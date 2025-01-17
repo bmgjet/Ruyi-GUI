@@ -116,9 +116,20 @@ namespace Ruyi_GUI
                 }
                 if (control.HasChildren) { LoadLangFile(control.Controls, strings); }
             }
+            this.Update();
+            toolTip1.SetToolTip(teacacheenable, teacacheenabletxt.Text);
+            toolTip1.SetToolTip(teacachecpu, teacachecputxt.Text);
+            toolTip1.SetToolTip(teacachethreshold, teacachethresholdtxt.Text);
+            toolTip1.SetToolTip(teacachestart, teacachestarttxt.Text);
+            toolTip1.SetToolTip(teacacheend, teacacheendtxt.Text);
+            toolTip1.SetToolTip(enhancevideoenable, enhancevideoenabletxt.Text);
+            toolTip1.SetToolTip(enhancevideoweight, enhancevideoweighttxt.Text);
+            toolTip1.SetToolTip(enhancevideostart, enhancevideostarttxt.Text);
+            toolTip1.SetToolTip(enhancevideoend, enhancevideoendtxt.Text);
+            toolTip1.SetToolTip(Steps, Stepstxt.Text);
         }
 
-        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked + "|" + discordhook.Text + "|" + fp8_quant_mode.Text + "|" + fp8_data_type.Text; }
+        private string SettingsString() { return Img1.Text + "|" + Img2.Text + "|" + VideoOut.Text + "|" + FrameRate.Text + "|" + AspectRatio.Text + "|" + Resolution.Text + "|" + Direction.Text + "|" + Motion.Text + "|" + GPUOffload.Text + "|" + LowMemoryMode.Checked + "|" + Steps.Text + "|" + Cfg.Text + "|" + Seed.Text + "|" + Scheduler.Text + "|" + VideoRes.Text + "|" + Loratxt.Text + "|" + Weighttxt.Text + "|" + Updates.Checked + "|" + discordhook.Text + "|" + fp8_quant_mode.Text + "|" + fp8_data_type.Text + "|" + teacacheenable.Checked + "|" + teacachecpu.Checked + "|" + teacachethreshold.Text + "|" + teacachestart.Text + "|" + teacacheend.Text + "|" + enhancevideoenable.Checked + "|" + enhancevideoweight.Text + "|" + enhancevideostart.Text + "|" + enhancevideoend.Text; }
 
 
         private void SaveSettings() { File.WriteAllText("Config.cfg", SettingsString()); }
@@ -149,6 +160,15 @@ namespace Ruyi_GUI
                 try { discordhook.Text = SSettings[18]; } catch { }
                 try { fp8_quant_mode.Text = SSettings[19]; } catch { }
                 try { fp8_data_type.Text = SSettings[20]; } catch { }
+                try { teacacheenable.Checked = bool.Parse(SSettings[21]); } catch { }
+                try { teacachecpu.Checked = bool.Parse(SSettings[22]); } catch { }
+                try { teacachethreshold.Text = SSettings[23]; } catch { }
+                try { teacachestart.Text = SSettings[24]; } catch { }
+                try { teacacheend.Text = SSettings[25]; } catch { }
+                try { enhancevideoenable.Checked = bool.Parse(SSettings[26]); } catch { }
+                try { enhancevideoweight.Text = SSettings[27]; } catch { }
+                try { enhancevideostart.Text = SSettings[28]; } catch { }
+                try { enhancevideoend.Text = SSettings[29]; } catch { }
             }
             catch
             {
@@ -390,6 +410,51 @@ namespace Ruyi_GUI
                     code += @"fp8_data_type = """ + fp8_data_type.Text + @"""" + System.Environment.NewLine;
                     continue;
                 }
+                if (line.StartsWith("tea_cache_enabled"))
+                {
+                    code += @"tea_cache_enabled = " + teacacheenable.Checked + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("tea_cache_offload_cpu"))
+                {
+                    code += @"tea_cache_offload_cpu = " + teacachecpu.Checked + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("tea_cache_threshold"))
+                {
+                    code += @"tea_cache_threshold = " + teacachethreshold.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("tea_cache_skip_start_steps"))
+                {
+                    code += @"tea_cache_skip_start_steps = " + teacachestart.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("tea_cache_skip_end_steps"))
+                {
+                    code += @"tea_cache_skip_end_steps = " + teacacheend.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("enhance_a_video_enabled"))
+                {
+                    code += @"enhance_a_video_enabled = " + enhancevideoenable.Checked + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("enhance_a_video_weight"))
+                {
+                    code += @"enhance_a_video_weight = " + enhancevideoweight.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("enhance_a_video_skip_start_steps"))
+                {
+                    code += @"enhance_a_video_skip_start_steps = " + enhancevideostart.Text + System.Environment.NewLine;
+                    continue;
+                }
+                if (line.StartsWith("enhance_a_video_skip_end_steps"))
+                {
+                    code += @"enhance_a_video_skip_end_steps = " + enhancevideoend.Text + System.Environment.NewLine;
+                    continue;
+                }
                 code += line + System.Environment.NewLine;
             }
             return code;
@@ -571,6 +636,12 @@ namespace Ruyi_GUI
             if (!Motion.Items.Contains(Motion.Text)) { MessageBox.Show(Error21.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!fp8_quant_mode.Items.Contains(fp8_quant_mode.Text)) { MessageBox.Show(Error23.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             if (!fp8_data_type.Items.Contains(fp8_data_type.Text)) { MessageBox.Show(Error24.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(teacachethreshold.Text)) { MessageBox.Show(Error25.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(teacachestart.Text)) { MessageBox.Show(Error26.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(teacacheend.Text)) { MessageBox.Show(Error27.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(enhancevideoweight.Text)) { MessageBox.Show(Error28.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(enhancevideostart.Text)) { MessageBox.Show(Error29.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
+            if (string.IsNullOrEmpty(enhancevideoend.Text)) { MessageBox.Show(Error30.Text, Errorlbl.Text, MessageBoxButtons.OK, MessageBoxIcon.Error); return false; }
             return true;
         }
 
